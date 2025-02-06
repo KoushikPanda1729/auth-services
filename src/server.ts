@@ -1,4 +1,4 @@
-const user = { name: "koushik" };
+const user = { id: "1" };
 
-const wellCome = () => user["name"];
+const wellCome = () => user.id;
 wellCome();
