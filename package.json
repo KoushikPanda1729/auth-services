@@ -7,7 +7,8 @@
     "lint:check": "eslint .",
     "format:fix": "prettier . --write",
     "format:check": "prettier . --check",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky"
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,7 @@
     "@types/eslint__js": "^8.42.3",
     "@types/node": "^22.13.1",
     "eslint": "^9.19.0",
+    "husky": "^9.1.7",
     "prettier": "3.4.2",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.23.0"
