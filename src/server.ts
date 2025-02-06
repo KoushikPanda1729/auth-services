@@ -1,1 +1,4 @@
-let h = "12345";
+const user = { name: "koushik" };
+
+const wellCome = () => user.name;
+wellCome();

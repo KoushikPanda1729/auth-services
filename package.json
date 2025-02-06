@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "format:fix": "npx prettier . --write",
-    "format:check": "npx prettier . --check",
+    "lint:fix": "eslint . --fix",
+    "lint:check": "eslint .",
+    "format:fix": "prettier . --write",
+    "format:check": "prettier . --check",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,8 +21,12 @@
   "homepage": "https://github.com/KoushikPanda1729/auth-services#readme",
   "description": "",
   "devDependencies": {
+    "@eslint/js": "^9.19.0",
+    "@types/eslint__js": "^8.42.3",
     "@types/node": "^22.13.1",
+    "eslint": "^9.19.0",
     "prettier": "3.4.2",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.23.0"
   }
 }
