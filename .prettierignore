@@ -1,0 +1,21 @@
+# Ignore all files in node_modules
+node_modules/
+
+# Ignore build output directories
+dist/
+build/
+
+# Ignore coverage output
+coverage/
+
+# Ignore environment variable files
+.env
+.env.local
+.env.*.local
+
+# Ignore log files
+*.log
+
+# Ignore specific files or directories
+path/to/ignored-file.js
+path/to/ignored-directory/
