@@ -5,7 +5,7 @@ import { logger } from "./config/logger";
 const app = express();
 
 app.get("/", (req, res) => {
-  res.send("Wellcome to home page");
+  res.send("Wellcome to Home page");
 });
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
