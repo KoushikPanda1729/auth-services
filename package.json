@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/server.ts",
+    "dev": "cross-env NODE_ENV=dev nodemon src/server.ts",
     "lint:fix": "eslint . --fix",
     "lint:check": "eslint .",
     "format:fix": "prettier . --write",

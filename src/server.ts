@@ -1,6 +1,7 @@
 import { config } from "dotenv";
 import app from "./app";
 import { logger } from "./config/logger";
+
 config();
 
 const startServer = () => {

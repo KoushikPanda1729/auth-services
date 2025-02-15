@@ -6,8 +6,9 @@ import "reflect-metadata";
 
 const app = express();
 
-app.use("/auth", authRouter);
+app.use(express.json({ limit: "20kb" }));
 
+app.use("/auth", authRouter);
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((err: HttpError, req: Request, res: Response, next: NextFunction) => {
   logger.error(err.message);
