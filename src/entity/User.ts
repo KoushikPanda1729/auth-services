@@ -12,4 +12,6 @@ export class User {
   gmail: string;
   @Column()
   password: string;
+  @Column()
+  role: string;
 }

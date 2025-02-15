@@ -8,13 +8,14 @@ export class UserService {
   constructor(userRepository: Repository<User>) {
     this.userRepository = userRepository;
   }
-  async create({ firstName, lastName, gmail, password }: IUserData) {
+  async create({ firstName, lastName, gmail, password, role }: IUserData) {
     try {
       const user = await this.userRepository.save({
         firstName,
         lastName,
         gmail,
         password,
+        role,
       });
       return user;
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
