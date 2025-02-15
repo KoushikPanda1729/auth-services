@@ -12,10 +12,12 @@ describe("POST /auth/register", () => {
         gmail: "test@123.com",
         password: "12345",
       };
+      console.log(userData.gmail);
+
       // Act
       const response = await request(app).post("/auth/register").send(userData);
       // Assert
-      expect(response.statusCode).toBe(201);
+      expect(response.statusCode).toBe(202);
     });
     it("should return json data", async () => {
       // AAA
