@@ -106,6 +106,40 @@ describe("POST /auth/register", () => {
       expect(users[0]).toHaveProperty("role");
       expect(users[0].role).toBe(roles.CUSTOMER);
     });
+    it("should describe the hash of password", async () => {
+      const userData = {
+        firstName: "Koushik",
+        lastName: "panda",
+        gmail: "test@123.com",
+        password: "12345",
+        role: "customer",
+      };
+
+      await request(app).post("/auth/register").send(userData);
+      const userRepository = connection.getRepository(User);
+      const users = await userRepository.find();
+      expect(users[0].password).not.toBe(userData.password);
+      expect(users[0].password).toHaveLength(60);
+      expect(users[0].password).toMatch(/^\$2[aby]\$\d{2}\$[./A-Za-z0-9]{53}$/);
+    });
+    it("should describe email is already exists", async () => {
+      // Arrange
+      const userData = {
+        firstName: "Koushik",
+        lastName: "panda",
+        gmail: "test@123.com",
+        password: "12345",
+        role: "customer",
+      };
+
+      // act
+      const userRepository = connection.getRepository(User);
+      await userRepository.save(userData);
+      const response = await request(app).post("/auth/register").send(userData);
+      const users = await userRepository.find();
+      expect(response.statusCode).toBe(400);
+      expect(users).toHaveLength(1);
+    });
   });
   describe("fields are missing", () => {});
 });

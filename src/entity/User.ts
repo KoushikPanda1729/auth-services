@@ -8,7 +8,7 @@ export class User {
   firstName: string;
   @Column()
   lastName: string;
-  @Column()
+  @Column({ unique: true })
   gmail: string;
   @Column()
   password: string;
