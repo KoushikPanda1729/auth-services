@@ -4,6 +4,7 @@ import { UserService } from "../services/UserService";
 import { AppDataSource } from "../config/data-source";
 import { User } from "../entity/User";
 import { logger } from "../config/logger";
+import registerValidator from "../validator/registerValidator";
 
 const authRouter = Router();
 
@@ -12,8 +13,10 @@ const userService = new UserService(userRepository);
 const authController = new AuthController(userService, logger);
 authRouter.post(
   "/register",
-  (req: Request, res: Response, next: NextFunction) =>
-    authController.resgister(req, res, next)
+  registerValidator,
+  async (req: Request, res: Response, next: NextFunction) => {
+    await authController.register(req, res, next);
+  }
 );
 
 export default authRouter;

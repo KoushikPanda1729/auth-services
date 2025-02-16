@@ -3,6 +3,7 @@ import { IRequestBody } from "../types";
 import { UserService } from "../services/UserService";
 import { Logger } from "winston";
 import { roles } from "../constants";
+import { validationResult } from "express-validator";
 
 export class AuthController {
   public UserService: UserService;
@@ -11,8 +12,14 @@ export class AuthController {
     this.UserService = userService;
     this.logger = logger;
   }
-  async resgister(req: IRequestBody, res: Response, next: NextFunction) {
+  async register(req: IRequestBody, res: Response, next: NextFunction) {
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+      return res.status(400).json({ errors: result.array() });
+    }
+
     const { firstName, lastName, gmail, password, role } = req.body;
+
     this.logger.debug("New user registered", {
       firstName,
       lastName,
