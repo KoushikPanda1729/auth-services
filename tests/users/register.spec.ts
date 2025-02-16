@@ -147,8 +147,9 @@ describe("POST /auth/register", () => {
       expect(users).toHaveLength(1);
     });
   });
+
   describe("fields are missing", () => {
-    it("should return 400 status code for email is required", async () => {
+    it("Should return 400 status code if gmail is missing.", async () => {
       const userData = {
         firstName: "Koushik",
         lastName: "panda",
@@ -158,10 +159,137 @@ describe("POST /auth/register", () => {
       };
 
       const response = await request(app).post("/auth/register").send(userData);
-      console.log(response.body);
       const userRepository = connection.getRepository(User);
       const user = await userRepository.find();
       expect(response.statusCode).toBe(400);
+      expect(user).toHaveLength(0);
+    });
+
+    it("Should return 400 status code if firstName is missing", async () => {
+      const userData = {
+        firstName: "",
+        lastName: "panda",
+        gmail: " test@123gmail.com ",
+        password: "12345",
+        role: "customer",
+      };
+
+      const response = await request(app).post("/auth/register").send(userData);
+      const userRepository = connection.getRepository(User);
+      const user = await userRepository.find();
+      expect(response.statusCode).toBe(400);
+      expect(user).toHaveLength(0);
+    });
+    it("Should return 400 status code if lastName is missing", async () => {
+      const userData = {
+        firstName: "Koushik",
+        lastName: "",
+        gmail: " test@123gmail.com ",
+        password: "12345",
+        role: "customer",
+      };
+
+      const response = await request(app).post("/auth/register").send(userData);
+      const userRepository = connection.getRepository(User);
+      const user = await userRepository.find();
+      expect(response.statusCode).toBe(400);
+      expect(user).toHaveLength(0);
+    });
+    it("Should return 400 status code if password is missing", async () => {
+      const userData = {
+        firstName: "Koushik",
+        lastName: "panda",
+        gmail: " test@123gmail.com ",
+        password: "",
+        role: "customer",
+      };
+
+      const response = await request(app).post("/auth/register").send(userData);
+      const userRepository = connection.getRepository(User);
+      const user = await userRepository.find();
+      expect(response.statusCode).toBe(400);
+      expect(user).toHaveLength(0);
+    });
+    it("Should return 400 status code if email is not a valid email", async () => {
+      const userData = {
+        firstName: "Koushik",
+        lastName: "panda",
+        gmail: " Test_123gmail.com ",
+        password: "12345",
+        role: "customer",
+      };
+
+      const response = await request(app).post("/auth/register").send(userData);
+      const userRepository = connection.getRepository(User);
+      const user = await userRepository.find();
+
+      expect(response.statusCode).toBe(400);
+      expect(user).toHaveLength(0);
+    });
+    it("Should return 400 status code if password length is less than 4 and max 10 characters", async () => {
+      const userData = {
+        firstName: "Koushik",
+        lastName: "panda",
+        gmail: " test@123gmail.com ",
+        password: "123456789076896",
+        role: "customer",
+      };
+
+      const response = await request(app).post("/auth/register").send(userData);
+      const userRepository = connection.getRepository(User);
+      const user = await userRepository.find();
+
+      expect(response.statusCode).toBe(400);
+      expect(user).toHaveLength(0);
+    });
+  });
+
+  describe("fields are in proper format", () => {
+    it("should trim the email field ", async () => {
+      const userData = {
+        firstName: "Koushik",
+        lastName: "panda",
+        gmail: " test@123gmail.com ",
+        password: "12345",
+        role: "customer",
+      };
+
+      await request(app).post("/auth/register").send(userData);
+      const userRepository = connection.getRepository(User);
+      const users = await userRepository.find();
+      expect(users[0].gmail).toBe("test@123gmail.com");
+    });
+    it("should trim the first name field ", async () => {
+      const userData = {
+        firstName: " Koushik ",
+        lastName: "panda",
+        gmail: " test@123gmail.com ",
+        password: "12345",
+        role: "customer",
+      };
+
+      await request(app).post("/auth/register").send(userData);
+      const userRepository = connection.getRepository(User);
+      const users = await userRepository.find();
+      expect(users[0].firstName).toBe("Koushik");
+    });
+    it("Should return an array of error messages if email is missing", async () => {
+      const userData = {
+        firstName: "Koushik",
+        lastName: "panda",
+        gmail: "",
+        password: "123456789076896",
+        role: "customer",
+      };
+
+      const response = await request(app).post("/auth/register").send(userData);
+      const userRepository = connection.getRepository(User);
+      const user = await userRepository.find();
+
+      expect(
+        (response.body as Record<string, string>).errors.length
+      ).toBeGreaterThan(0);
+      expect(response.body).toHaveProperty("errors");
       expect(user).toHaveLength(0);
     });
   });
