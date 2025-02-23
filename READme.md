@@ -55,16 +55,6 @@ npm test
 | `npm run lint` | Lint code with ESLint              |
 | `npm run test` | Run tests with Jest                |
 
-## 📌 Contributing
-
-Contributions are welcome! Feel free to open an issue or submit a pull request.
-
-## 📜 License
-
-This project is licensed under **ISC**.
-
----
-
 💡 _Built with ❤️ by [Koushik Panda](https://github.com/KoushikPanda1729)_
 
 ## 🚧 In Progress
