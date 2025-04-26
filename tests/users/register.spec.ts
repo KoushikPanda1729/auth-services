@@ -102,7 +102,6 @@ describe("POST /auth/register", () => {
         lastName: "panda",
         gmail: "test@123.com",
         password: "12345",
-        role: "customer",
       };
 
       await request(app).post("/auth/register").send(userData);

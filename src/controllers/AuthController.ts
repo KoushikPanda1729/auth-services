@@ -23,14 +23,13 @@ export class AuthController {
       return res.status(400).json({ errors: result.array() });
     }
 
-    const { firstName, lastName, gmail, password, role } = req.body;
+    const { firstName, lastName, gmail, password } = req.body;
 
     this.logger.debug("New user registered", {
       firstName,
       lastName,
       gmail,
       password: "**********",
-      role,
     });
     try {
       const user = await this.UserService.create({
