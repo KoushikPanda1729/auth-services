@@ -27,8 +27,19 @@ export class UserService {
         role,
       });
       return user;
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (error) {
+    } catch {
+      const err = createHttpError(500, "failed to store data in database");
+      throw err;
+    }
+  }
+
+  async findByEmail(gmail: string) {
+    try {
+      const user = await this.userRepository.findOne({
+        where: { gmail: gmail },
+      });
+      return user;
+    } catch {
       const err = createHttpError(500, "failed to store data in database");
       throw err;
     }
