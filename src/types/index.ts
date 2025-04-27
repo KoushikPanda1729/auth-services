@@ -10,3 +10,10 @@ export interface IUserData {
 export interface IRequestBody extends Request {
   body: IUserData;
 }
+
+export interface IAuthRequest extends Request {
+  auth: {
+    sub: string;
+    role: string;
+  };
+}

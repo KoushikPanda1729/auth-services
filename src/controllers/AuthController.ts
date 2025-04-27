@@ -5,7 +5,7 @@ import { Logger } from "winston";
 import { roles } from "../constants";
 import { TokenService } from "../services/TokenService";
 import { UserService } from "../services/UserService";
-import { IRequestBody } from "../types";
+import { IAuthRequest, IRequestBody } from "../types";
 import createHttpError from "http-errors";
 import { CredentialsService } from "../services/CredentialsService";
 
@@ -139,5 +139,11 @@ export class AuthController {
       next(error);
       return;
     }
+  }
+
+  async self(req: IAuthRequest, res: Response) {
+    const user = await this.UserService.findById(Number(req.auth.sub));
+
+    res.json(user);
   }
 }

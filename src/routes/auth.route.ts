@@ -9,6 +9,8 @@ import registerValidator from "../validator/registerValidator";
 import { RefreshToken } from "../entity/RefreshToken";
 import loginValidator from "../validator/loginValidator";
 import { CredentialsService } from "../services/CredentialsService";
+import authenticate from "../../middlewares/authenticate";
+import { IAuthRequest } from "../types";
 
 const authRouter = Router();
 
@@ -37,5 +39,8 @@ authRouter.post(
     await authController.login(req, res, next);
   }
 );
+authRouter.get("/self", authenticate, async (req: Request, res: Response) => {
+  await authController.self(req as IAuthRequest, res);
+});
 
 export default authRouter;

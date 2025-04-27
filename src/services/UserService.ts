@@ -44,4 +44,15 @@ export class UserService {
       throw err;
     }
   }
+  async findById(id: number) {
+    try {
+      const user = await this.userRepository.findOne({
+        where: { id: id },
+      });
+      return user;
+    } catch {
+      const err = createHttpError(500, "failed to store data in database");
+      throw err;
+    }
+  }
 }

@@ -139,10 +139,9 @@ describe("POST /auth/login", () => {
 
       // Act
       const response = await request(app).post("/auth/login").send(userData);
+
       // Assert
-      expect(
-        (response.headers as Record<string, string>)["content-type"]
-      ).toEqual(expect.stringContaining("json"));
+      expect(response.statusCode).toBe(400);
     });
   });
 });
