@@ -30,7 +30,7 @@ describe("POST /auth/login", () => {
   });
 
   describe("Given all fields for login", () => {
-    it("should return 201 status code", async () => {
+    it("should return 200 status code", async () => {
       // AAA
       // Arrange
       const userData = {
@@ -41,7 +41,7 @@ describe("POST /auth/login", () => {
       // Act
       const response = await request(app).post("/auth/login").send(userData);
       // Assert
-      expect(response.statusCode).toBe(201);
+      expect(response.statusCode).toBe(200);
     });
 
     it("should return json data", async () => {
