@@ -79,6 +79,7 @@ export class AuthController {
       return;
     }
   }
+
   async login(req: IRequestBody, res: Response, next: NextFunction) {
     const result = validationResult(req);
     if (!result.isEmpty()) {
@@ -132,6 +133,7 @@ export class AuthController {
         httpOnly: true,
         maxAge: 1000 * 60 * 60 * 24 * 30,
       });
+      this.logger.info("User has been logged in", { id: user.id });
       res.status(201).json({ id: user.id });
     } catch (error) {
       next(error);
