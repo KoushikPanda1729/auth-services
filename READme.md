@@ -57,6 +57,18 @@ npm test
 
 💡 _Built with ❤️ by [Koushik Panda](https://github.com/KoushikPanda1729)_
 
+## 🛠️ Future Enhancements
+
+- Implement OAuth2.0 for third-party authentication.
+- Add support for multi-factor authentication (MFA).
+- Enhance API documentation with tools like Swagger.
+- Introduce rate limiting to prevent abuse.
+- Add integration tests for end-to-end validation.
+- Improve error handling and monitoring with tools like Sentry.
+- Expand database support to include MySQL and MongoDB.
+
+Stay tuned for more updates!
+
 ## 🚧 In Progress
 
 This README is a work in progress. More details and updates will be added soon!
