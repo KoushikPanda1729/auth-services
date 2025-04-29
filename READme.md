@@ -1,74 +1,57 @@
-# 🚀 Auth Services
+# Auth Service
 
-A simple and efficient authentication service built with **Node.js, TypeScript, and Express**, using **TypeORM** for database management.
+This service is a part of a microservices architecture and is responsible for handling authentication and authorization.
 
-## 📌 Features
+## Features
 
-- User authentication (Register, Login, Logout)
-- Password hashing with **bcrypt**
-- Input validation using **express-validator**
-- Structured logging with **winston**
-- Environment-based configurations using **dotenv**
-- Database management with **TypeORM** and **PostgreSQL**
-- Linting and formatting with **ESLint** & **Prettier**
-- Docker support for easy deployment
+- User registration and login
+- Token-based authentication (e.g., JWT)
+- Role-based access control
+- Password hashing and validation
+- Token refresh and expiration handling
 
-## 🚀 Getting Started
+## Technologies
 
-### 1️⃣ Clone the Repository
+- **Backend**: [Your backend framework, e.g., Node.js, Express]
+- **Database**: [Your database, e.g., MongoDB, PostgreSQL]
+- **Authentication**: JSON Web Tokens (JWT), OAuth2
 
-```sh
-git clone https://github.com/KoushikPanda1729/auth-services.git
-cd auth-services
-```
+## Setup
 
-### 2️⃣ Install Dependencies
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Configure environment variables in `.env` file:
+   ```env
+   PORT=3000
+   DATABASE_URL=<your-database-url>
+   JWT_SECRET=<your-secret-key>
+   ```
+4. Start the service:
+   ```bash
+   npm start
+   ```
 
-```sh
-npm install
-```
+## API Endpoints
 
-### 3️⃣ Setup Environment Variables
+- `POST /register` - Register a new user
+- `POST /login` - Authenticate user and return token
+- `GET /profile` - Get user profile (requires authentication)
+- `POST /refresh-token` - Refresh authentication token
 
-Copy `.env.dev` to `.env` and configure the variables.
+## Work in Progress
 
-### 4️⃣ Run the Development Server
+This project is currently under development. Some features may not be fully implemented or stable. Contributions and feedback are welcome to help improve the service.
 
-```sh
-npm run dev
-```
+## License
 
-## 🧪 Running Tests
+This project is licensed under the [MIT License](LICENSE).
 
-Run unit tests using Jest:
+## Contributing
 
-```sh
-npm test
-```
-
-## 📜 Scripts
-
-| Command        | Description                        |
-| -------------- | ---------------------------------- |
-| `npm run dev`  | Start development server (nodemon) |
-| `npm start`    | Start production server            |
-| `npm run lint` | Lint code with ESLint              |
-| `npm run test` | Run tests with Jest                |
-
-💡 _Built with ❤️ by [Koushik Panda](https://github.com/KoushikPanda1729)_
-
-## 🛠️ Future Enhancements
-
-- Implement OAuth2.0 for third-party authentication.
-- Add support for multi-factor authentication (MFA).
-- Enhance API documentation with tools like Swagger.
-- Introduce rate limiting to prevent abuse.
-- Add integration tests for end-to-end validation.
-- Improve error handling and monitoring with tools like Sentry.
-- Expand database support to include MySQL and MongoDB.
-
-Stay tuned for more updates!
-
-## 🚧 In Progress
-
-This README is a work in progress. More details and updates will be added soon!
+Contributions are welcome! Please submit a pull request or open an issue for any improvements or bugs.
