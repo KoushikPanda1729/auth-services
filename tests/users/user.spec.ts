@@ -58,6 +58,7 @@ describe("GET /auth/self", () => {
       // Assert
       expect((response.body as Record<string, string>).id).toBe(user.id);
     });
+
     it("should not  return the user password", async () => {
       const userData = {
         firstName: "Koushik",
@@ -80,6 +81,11 @@ describe("GET /auth/self", () => {
       expect(response.body as Record<string, string>).not.toHaveProperty(
         "password"
       );
+    });
+
+    it("should return 401 status code if token does not exists", async () => {
+      const response = await request(app).get("/auth/self").send();
+      expect(response.statusCode).toBe(401);
     });
   });
 });
