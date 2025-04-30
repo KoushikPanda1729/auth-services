@@ -126,12 +126,14 @@ export class AuthController {
         sameSite: true,
         httpOnly: true,
         maxAge: 1000 * 60 * 60,
+        secure: true,
       });
       res.cookie("refreshToken", refreshToken, {
         domain: "localhost",
         sameSite: true,
         httpOnly: true,
         maxAge: 1000 * 60 * 60 * 24 * 30,
+        secure: true,
       });
       this.logger.info("User has been logged in", { id: user.id });
       res.status(200).json({ id: user.id });
