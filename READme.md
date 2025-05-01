@@ -13,7 +13,7 @@ This service is a part of a microservices architecture and is responsible for ha
 ## Technologies
 
 - **Backend**: [Your backend framework, e.g., Node.js, Express]
-- **Database**: [Your database, e.g., MongoDB, PostgreSQL]
+- **Database**: [Your database, e.g. PostgreSQL]
 - **Authentication**: JSON Web Tokens (JWT), OAuth2
 
 ## Setup
@@ -41,17 +41,9 @@ This service is a part of a microservices architecture and is responsible for ha
 
 - `POST /register` - Register a new user
 - `POST /login` - Authenticate user and return token
-- `GET /profile` - Get user profile (requires authentication)
+- `GET /self` - Get user profile (requires authentication)
 - `POST /refresh-token` - Refresh authentication token
 
 ## Work in Progress
 
 This project is currently under development. Some features may not be fully implemented or stable. Contributions and feedback are welcome to help improve the service.
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
-
-## Contributing
-
-Contributions are welcome! Please submit a pull request or open an issue for any improvements or bugs.
