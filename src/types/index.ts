@@ -17,3 +17,11 @@ export interface IAuthRequest extends Request {
     role: string;
   };
 }
+
+export interface IAuthCookie {
+  accessToken: string;
+  refreshToke: string;
+}
+export interface IRefreshTokePayload {
+  id: string;
+}

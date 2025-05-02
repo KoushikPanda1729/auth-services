@@ -1,4 +1,4 @@
-import { NextFunction, Response } from "express";
+import { NextFunction, Response, Request } from "express";
 import { validationResult } from "express-validator";
 import { JwtPayload } from "jsonwebtoken";
 import { Logger } from "winston";
@@ -25,6 +25,7 @@ export class AuthController {
     this.tokenService = tokenService;
     this.credentialsService = credentialsService;
   }
+
   async register(req: IRequestBody, res: Response, next: NextFunction) {
     const result = validationResult(req);
     if (!result.isEmpty()) {
@@ -146,5 +147,10 @@ export class AuthController {
   async self(req: IAuthRequest, res: Response) {
     const user = await this.UserService.findById(Number(req.auth.sub));
     res.json({ ...user, password: undefined });
+  }
+
+  async refresh(req: Request, res: Response) {
+    await this.UserService.findById(Number());
+    res.json({});
   }
 }

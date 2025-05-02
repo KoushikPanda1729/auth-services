@@ -11,6 +11,7 @@ import loginValidator from "../validator/loginValidator";
 import { CredentialsService } from "../services/CredentialsService";
 import authenticate from "../../middlewares/authenticate";
 import { IAuthRequest } from "../types";
+import validateRefreshToken from "../../middlewares/validateRefreshToken";
 
 const authRouter = Router();
 
@@ -42,5 +43,12 @@ authRouter.post(
 authRouter.get("/self", authenticate, async (req: Request, res: Response) => {
   await authController.self(req as IAuthRequest, res);
 });
+authRouter.post(
+  "/refresh",
+  validateRefreshToken,
+  async (req: Request, res: Response) => {
+    await authController.refresh(req, res);
+  }
+);
 
 export default authRouter;

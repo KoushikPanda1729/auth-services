@@ -2,6 +2,7 @@ import { expressjwt } from "express-jwt";
 import jwksClient from "jwks-rsa";
 import { Config } from "../src/config";
 import { Request } from "express";
+import { IAuthCookie } from "../src/types";
 
 export default expressjwt({
   secret: jwksClient.expressJwtSecret({
@@ -19,7 +20,7 @@ export default expressjwt({
       }
     }
 
-    const { accessToken } = req.cookies as Record<string, string>;
+    const { accessToken } = req.cookies as IAuthCookie;
     return accessToken;
   },
 });
