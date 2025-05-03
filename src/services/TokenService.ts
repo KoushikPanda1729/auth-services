@@ -52,7 +52,7 @@ export class TokenService {
     return token;
   }
 
-  async deleteOldRefreshToken(tokenId: number) {
+  async deleteRefreshToken(tokenId: number) {
     const isDeleteOldRefreshToken = await this.TokenRepository.delete({
       id: tokenId,
     });

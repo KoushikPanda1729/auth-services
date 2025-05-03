@@ -1,13 +1,13 @@
 import { NextFunction, Response } from "express";
 import { validationResult } from "express-validator";
+import createHttpError from "http-errors";
 import { JwtPayload } from "jsonwebtoken";
 import { Logger } from "winston";
 import { roles } from "../constants";
+import { CredentialsService } from "../services/CredentialsService";
 import { TokenService } from "../services/TokenService";
 import { UserService } from "../services/UserService";
 import { IAuthRequest, IRequestBody } from "../types";
-import createHttpError from "http-errors";
-import { CredentialsService } from "../services/CredentialsService";
 
 export class AuthController {
   public UserService: UserService;
@@ -171,9 +171,10 @@ export class AuthController {
 
       const token = await this.tokenService.persistsRefreshToken(user);
 
-      const deleteOldRefreshToken =
-        await this.tokenService.deleteOldRefreshToken(Number(req.auth.id));
-      if (!deleteOldRefreshToken) {
+      const deleteRefreshToken = await this.tokenService.deleteRefreshToken(
+        Number(req.auth.id)
+      );
+      if (!deleteRefreshToken) {
         const err = createHttpError(400, "Old refresh token not deleted");
         next(err);
         return;
@@ -190,6 +191,19 @@ export class AuthController {
       res.status(200).json({ ...user, password: undefined });
     } catch (error) {
       next(error);
+    }
+  }
+
+  async logout(req: IAuthRequest, res: Response, next: NextFunction) {
+    try {
+      await this.tokenService.deleteRefreshToken(Number(req.auth.id));
+      res
+        .clearCookie("refreshToken")
+        .clearCookie("accessToken")
+        .json({ success: true, message: "User logged out successfully" });
+    } catch (error) {
+      next(error);
+      return;
     }
   }
 }

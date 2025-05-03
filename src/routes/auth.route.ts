@@ -12,6 +12,7 @@ import { CredentialsService } from "../services/CredentialsService";
 import authenticate from "../../middlewares/authenticate";
 import { IAuthRequest } from "../types";
 import validateRefreshToken from "../../middlewares/validateRefreshToken";
+import parseRefreshToken from "../../middlewares/parseRefreshToken";
 
 const authRouter = Router();
 
@@ -48,6 +49,14 @@ authRouter.post(
   validateRefreshToken,
   async (req: Request, res: Response, next: NextFunction) => {
     await authController.refresh(req as IAuthRequest, res, next);
+  }
+);
+authRouter.post(
+  "/logout",
+  authenticate,
+  parseRefreshToken,
+  async (req: Request, res: Response, next: NextFunction) => {
+    await authController.logout(req as IAuthRequest, res, next);
   }
 );
 
