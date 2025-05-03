@@ -31,7 +31,7 @@ export class TokenService {
     return accessToken;
   }
 
-  genereateRefreshToken(payload: JwtPayload) {
+  generateRefreshToken(payload: JwtPayload) {
     const refreshToken = sign(payload, Config.REFRESH_TOKEN_SECRET!, {
       algorithm: "HS256",
       expiresIn: "1y",
@@ -50,5 +50,12 @@ export class TokenService {
       expireAt: new Date(Date.now() + expireAt),
     });
     return token;
+  }
+
+  async deleteOldRefreshToken(tokenId: number) {
+    const isDeleteOldRefreshToken = await this.TokenRepository.delete({
+      id: tokenId,
+    });
+    return isDeleteOldRefreshToken.affected === 1;
   }
 }

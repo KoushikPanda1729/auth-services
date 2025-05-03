@@ -15,12 +15,13 @@ export interface IAuthRequest extends Request {
   auth: {
     sub: string;
     role: string;
+    id?: string;
   };
 }
 
 export interface IAuthCookie {
   accessToken: string;
-  refreshToke: string;
+  refreshToken: string;
 }
 export interface IRefreshTokePayload {
   id: string;

@@ -1,9 +1,10 @@
-import { DataSource } from "typeorm";
-import { AppDataSource } from "../../src/config/data-source";
 import request from "supertest";
+import { DataSource } from "typeorm";
 import app from "../../src/app";
+import { AppDataSource } from "../../src/config/data-source";
+import { isJwtValid } from "../../src/utils";
 
-describe("GET /auth/refresh", () => {
+describe("POST /auth/refresh", () => {
   let connection: DataSource;
 
   beforeAll(async () => {
@@ -18,42 +19,97 @@ describe("GET /auth/refresh", () => {
   afterAll(async () => {
     await connection.destroy();
   });
+  const registerAndLogin = async () => {
+    const userData = {
+      firstName: "Koushik",
+      lastName: "Panda",
+      gmail: "test@example.com",
+      password: "12345",
+    };
+    await request(app).post("/auth/register").send(userData);
 
-  describe("Given all fields for login", () => {
-    it("should return 200 status code", async () => {
-      const userData = {
-        firstName: "Test",
-        lastName: "User",
-        gmail: "test@123.com",
-        password: "12345",
-      };
+    const response = await request(app).post("/auth/login").send({
+      gmail: userData.gmail,
+      password: userData.password,
+    });
+    interface Headers {
+      ["set-cookie"]: string[];
+    }
+    const cookies =
+      (response.headers as unknown as Headers)["set-cookie"] || [];
+    let refreshToken = null;
+    cookies.forEach((cookie) => {
+      if (cookie.startsWith("refreshToken=")) {
+        refreshToken = cookie.split(";")[0].split("=")[1];
+      }
+    });
 
-      // Register the user
-      await request(app).post("/auth/register").send(userData);
+    return { refreshToken, response };
+  };
 
-      // Login to get cookies
-      const loginRes = await request(app)
-        .post("/auth/login")
-        .send({ gmail: userData.gmail, password: userData.password });
+  describe("Given all fields for refresh token", () => {
+    it("should return 200 and new tokens if refresh token is valid", async () => {
+      const { refreshToken } = await registerAndLogin();
 
-      // Extract refresh token cookie
-      const cookies: string[] | undefined = Array.isArray(
-        loginRes.headers["set-cookie"]
-      )
-        ? loginRes.headers["set-cookie"]
-        : [loginRes.headers["set-cookie"]].filter(Boolean);
-      const refreshTokenCookie: string | undefined = Array.isArray(cookies)
-        ? cookies.find((cookie) => cookie.startsWith("refreshToken"))
-        : undefined;
+      expect(refreshToken).not.toBeNull();
+      expect(isJwtValid(refreshToken)).toBeTruthy();
 
-      expect(refreshTokenCookie).toBeDefined(); // Sanity check
-
-      // Send request with the refresh token cookie
-      const refreshRes = await request(app)
+      const response = await request(app)
         .post("/auth/refresh")
-        .set("Cookie", refreshTokenCookie || "");
+        .set("Cookie", [`refreshToken=${refreshToken}`])
+        .send();
 
-      expect(refreshRes.statusCode).toBe(200);
+      expect(response.statusCode).toBe(200);
+    });
+
+    it("should return 401 if refresh token is missing", async () => {
+      const response = await request(app).post("/auth/refresh").send();
+      expect(response.statusCode).toBe(401);
+    });
+
+    it("should return 401 if refresh token is empty", async () => {
+      const { refreshToken } = await registerAndLogin();
+
+      expect(refreshToken).not.toBeNull();
+      expect(isJwtValid(refreshToken)).toBeTruthy();
+
+      const response = await request(app)
+        .post("/auth/refresh")
+        .set("Cookie", [`refreshToken=${""}`])
+        .send();
+
+      expect(response.statusCode).toBe(401);
+    });
+
+    it("should return 401 if refresh token is invalid", async () => {
+      const { refreshToken } = await registerAndLogin();
+      expect(refreshToken).not.toBe(null);
+      const response = await request(app)
+        .post("/auth/refresh")
+        .set("Cookie", `refreshToken=${"not a refresh token"}`);
+      expect(response.statusCode).toBe(401);
+    });
+
+    it("should return 401 if refresh token is not JWT", async () => {
+      const res = await request(app)
+        .post("/auth/refresh")
+        .set("Cookie", [`refreshToken=random_string_not_jwt`])
+        .send();
+
+      expect(res.statusCode).toBe(401);
+    });
+
+    it("should return 401 if refresh token is tampered", async () => {
+      const { refreshToken } = await registerAndLogin();
+
+      const tamperedToken = (refreshToken ?? "").slice(0, -1) + "X";
+
+      const res = await request(app)
+        .post("/auth/refresh")
+        .set("Cookie", [`refreshToken=${tamperedToken}`])
+        .send();
+
+      expect(res.statusCode).toBe(401);
     });
   });
 });

@@ -46,8 +46,8 @@ authRouter.get("/self", authenticate, async (req: Request, res: Response) => {
 authRouter.post(
   "/refresh",
   validateRefreshToken,
-  async (req: Request, res: Response) => {
-    await authController.refresh(req, res);
+  async (req: Request, res: Response, next: NextFunction) => {
+    await authController.refresh(req as IAuthRequest, res, next);
   }
 );
 

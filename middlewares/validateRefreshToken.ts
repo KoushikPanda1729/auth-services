@@ -10,26 +10,26 @@ export default expressjwt({
   secret: Config.REFRESH_TOKEN_SECRET!,
   algorithms: ["HS256"],
   getToken(req: Request) {
-    const { refreshToke } = req.cookies as IAuthCookie;
-    return refreshToke;
+    const { refreshToken } = req.cookies as IAuthCookie;
+
+    return refreshToken;
   },
-  isRevoked(req: Request, token) {
-    console.log("===============", token);
+  async isRevoked(req: Request, token) {
     try {
       const refresTokenRepository = AppDataSource.getRepository(RefreshToken);
-      const refreshToken = refresTokenRepository.findOne({
+      const refreshToken = await refresTokenRepository.findOne({
         where: {
           id: Number((token?.payload as IRefreshTokePayload)?.id),
           user: { id: Number(token?.payload.sub) },
         },
       });
-      return refreshToken === null;
+      return refreshToken === null; // revoke token if not found
     } catch (error) {
       logger.error("Error while getting the refresh token", {
         id: (token?.payload as IRefreshTokePayload).id,
         error,
       });
-      return true;
+      return true; // revoke token on error
     }
   },
 });
