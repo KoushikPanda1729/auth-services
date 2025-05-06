@@ -43,6 +43,7 @@ This service is a part of a microservices architecture and is responsible for ha
 - `POST /login` - Authenticate user and return token
 - `GET /self` - Get user profile (requires authentication)
 - `POST /refresh-token` - Refresh authentication token
+- `POST /logout` - logout user
 
 ## Work in Progress
 
