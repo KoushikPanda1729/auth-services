@@ -26,3 +26,12 @@ export interface IAuthCookie {
 export interface IRefreshTokePayload {
   id: string;
 }
+
+export interface ITenant {
+  name: string;
+  address: string;
+}
+
+export interface ICreateTenantReqest extends Request {
+  body: ITenant;
+}

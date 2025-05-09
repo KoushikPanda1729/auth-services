@@ -2,6 +2,7 @@ import request from "supertest";
 import app from "../../src/app";
 import { DataSource } from "typeorm";
 import { AppDataSource } from "../../src/config/data-source";
+import { Tenant } from "../../src/entity/Tenant";
 
 describe("POST /tenants", () => {
   let connection: DataSource;
@@ -21,10 +22,23 @@ describe("POST /tenants", () => {
 
   it("should return 201 status code", async () => {
     const tenantsData = {
-      name: "",
-      address: "",
+      name: "Tenant name",
+      address: "Tenant address",
     };
     const response = await request(app).post("/tenants").send(tenantsData);
     expect(response.statusCode).toBe(201);
+  });
+
+  it("should return 201 status code", async () => {
+    const tenantsData = {
+      name: "Tenant name",
+      address: "Tenant address",
+    };
+    const response = await request(app).post("/tenants").send(tenantsData);
+
+    const tenantRepository = connection.getRepository(Tenant);
+    const tenants = await tenantRepository.find();
+    expect(response.statusCode).toBe(201);
+    expect(tenants).toHaveLength(1);
   });
 });
