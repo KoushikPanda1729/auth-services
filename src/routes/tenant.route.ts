@@ -5,6 +5,8 @@ import { AppDataSource } from "../config/data-source";
 import { Tenant } from "../entity/Tenant";
 import { logger } from "../config/logger";
 import authenticate from "../../middlewares/authenticate";
+import { canAccess } from "../../middlewares/canAccess";
+import { roles } from "../constants";
 
 const tenantRouter = Router();
 const userRepository = AppDataSource.getRepository(Tenant);
@@ -14,6 +16,7 @@ const tenantController = new TenantController(tenantService, logger);
 tenantRouter.post(
   "/",
   authenticate,
+  canAccess([roles.ADMIN]),
   async (req: Request, res: Response, next: NextFunction) => {
     await tenantController.create(req, res, next);
   }
