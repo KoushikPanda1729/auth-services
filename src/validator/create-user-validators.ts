@@ -1,7 +1,3 @@
-// import { body } from "express-validator";
-
-// export default [body("gmail").notEmpty().withMessage("Gmail is required ! ")];
-
 import { checkSchema } from "express-validator";
 export default checkSchema({
   gmail: {
@@ -31,5 +27,10 @@ export default checkSchema({
       options: { min: 4, max: 20 },
       errorMessage: "Password should be at least 4 chars and maximum 20",
     },
+  },
+  role: {
+    errorMessage: "Role is required!",
+    notEmpty: true,
+    trim: true,
   },
 });

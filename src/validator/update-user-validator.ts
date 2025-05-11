@@ -1,8 +1,5 @@
-// import { body } from "express-validator";
-
-// export default [body("gmail").notEmpty().withMessage("Gmail is required ! ")];
-
 import { checkSchema } from "express-validator";
+import { IUpdateUserRequest } from "../types";
 export default checkSchema({
   gmail: {
     errorMessage: "Gmail is required!",
@@ -30,6 +27,26 @@ export default checkSchema({
     isLength: {
       options: { min: 4, max: 20 },
       errorMessage: "Password should be at least 4 chars and maximum 20",
+    },
+  },
+  role: {
+    errorMessage: "Role is required!",
+    notEmpty: true,
+    trim: true,
+  },
+  tenantId: {
+    errorMessage: "Tenant id is required!",
+    trim: true,
+    custom: {
+      options: (value: string, { req }) => {
+        console.log("OOOOOOOOOOOOOOOOOOOOOOO", req.body);
+        const role = (req as IUpdateUserRequest).body.role;
+        if (role === "admin") {
+          return true;
+        } else {
+          return !!value;
+        }
+      },
     },
   },
 });

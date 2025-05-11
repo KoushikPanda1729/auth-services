@@ -1,6 +1,6 @@
 import { Repository } from "typeorm";
 import { User } from "../entity/User";
-import { IUserData } from "../types";
+import { ILimitedUserData, IUserData } from "../types";
 import createHttpError from "http-errors";
 import bcrypt from "bcrypt";
 
@@ -53,6 +53,31 @@ export class UserService {
     } catch {
       const err = createHttpError(500, "failed to store data in database");
       throw err;
+    }
+  }
+
+  async update(
+    id: number,
+    { firstName, lastName, role, gmail, tenantId }: ILimitedUserData
+  ) {
+    console.log("*****************>", {
+      firstName,
+      lastName,
+      role,
+      gmail,
+      tenantId,
+    });
+    try {
+      return await this.userRepository.update(id, {
+        firstName,
+        lastName,
+        role,
+        gmail,
+        tenant: tenantId ? { id: tenantId } : undefined,
+      });
+    } catch {
+      const error = createHttpError(500, "Failed to update data in data base");
+      throw error;
     }
   }
 }

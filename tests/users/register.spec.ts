@@ -289,12 +289,12 @@ describe("POST /auth/register", () => {
       expect(response.statusCode).toBe(400);
       expect(user).toHaveLength(0);
     });
-    it("Should return 400 status code if password length is less than 4 and max 10 characters", async () => {
+    it("Should return 400 status code if password length is less than 4 and max 20 characters", async () => {
       const userData = {
         firstName: "Koushik",
         lastName: "panda",
         gmail: " test@123gmail.com ",
-        password: "12345678910",
+        password: "12345678919889678678676565645645654350",
         role: "customer",
       };
 
