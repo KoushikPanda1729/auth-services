@@ -139,53 +139,46 @@ describe("POST /users", () => {
     const tenant = await tenantRepository.save({
       name: "Test Tenant",
       address: "123 Test St",
-      // Add other required fields for your Tenant entity
     });
     const userData = {
       firstName: "Koushik",
       lastName: "panda",
-      gmail: " test@123gmail.com ",
+      gmail: "test@123gmail.com",
       password: "12345",
       tenantId: tenant.id,
       role: roles.ADMIN,
     };
+
     const userRepository = connection.getRepository(User);
     const newUser = await userRepository.save(userData);
-    const updatedTenant = await tenantRepository.save({
-      name: "Test Tenant",
-      address: "123 Test St",
-      // Add other required fields for your Tenant entity
+    // Create a second tenant for the update
+    const secondTenant = await tenantRepository.save({
+      name: "Second Tenant",
+      address: "456 Second St",
     });
     const updatedUserData = {
       firstName: "Alex",
       lastName: "Jonson",
-      gmail: " panda@123gmail.com ",
-      password: "12345",
-      tenantId: updatedTenant.id,
+      gmail: "    test@123gmail.com",
       role: roles.ADMIN,
+      tenantId: secondTenant.id,
     };
+
     const responseUpdate = await request(app)
       .patch(`/users/${newUser.id}`)
       .set("Cookie", [`accessToken=${accessToken}`])
       .send(updatedUserData);
-    console.log("==============->", responseUpdate.error);
     expect(responseUpdate.statusCode).toBe(200);
     expect(responseUpdate.body).toHaveProperty("id");
     expect((responseUpdate.body as Record<string, string>).id).toBe(newUser.id);
 
-    const response = await request(app)
-      .patch(`/users/${newUser.id}`)
-      .set("Cookie", [`accessToken=${accessToken}`]);
-    console.log("------------------>", response.error);
-
-    expect(response.statusCode).toBe(200);
-    expect(response.body).toHaveProperty("data");
-    expect(Array.isArray((response.body as Record<string, string>).data)).toBe(
-      true
-    );
-    expect((response.body as Record<string, string>).data).toHaveLength(1);
-    expect((response.body as Record<string, string>).data[0]).toMatchObject(
-      updatedUserData
-    );
+    // Final validation - check that the user was updated
+    const updatedUser = await userRepository.findOne({
+      where: { id: newUser.id },
+      relations: ["tenant"],
+    });
+    expect(updatedUser?.firstName).toBe("Alex");
+    expect(updatedUser?.lastName).toBe("Jonson");
+    expect(updatedUser?.tenant.id).toBe(secondTenant.id);
   });
 });

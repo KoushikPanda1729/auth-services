@@ -34,8 +34,6 @@ export class UserController {
   }
 
   async update(req: IUpdateUserRequest, res: Response, next: NextFunction) {
-    console.log("4444444444444444444444444444444", req.body);
-
     const result = validationResult(req);
     if (!result.isEmpty()) {
       return res.status(400).json({ errors: result.array() });

@@ -60,13 +60,6 @@ export class UserService {
     id: number,
     { firstName, lastName, role, gmail, tenantId }: ILimitedUserData
   ) {
-    console.log("*****************>", {
-      firstName,
-      lastName,
-      role,
-      gmail,
-      tenantId,
-    });
     try {
       return await this.userRepository.update(id, {
         firstName,

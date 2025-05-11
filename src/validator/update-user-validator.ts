@@ -21,6 +21,7 @@ export default checkSchema({
     trim: true,
   },
   password: {
+    optional: true,
     errorMessage: "password is required!",
     notEmpty: true,
     trim: true,
@@ -39,7 +40,6 @@ export default checkSchema({
     trim: true,
     custom: {
       options: (value: string, { req }) => {
-        console.log("OOOOOOOOOOOOOOOOOOOOOOO", req.body);
         const role = (req as IUpdateUserRequest).body.role;
         if (role === "admin") {
           return true;
