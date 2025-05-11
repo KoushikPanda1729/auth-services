@@ -7,6 +7,7 @@ import { logger } from "../config/logger";
 import authenticate from "../../middlewares/authenticate";
 import { canAccess } from "../../middlewares/canAccess";
 import { roles } from "../constants";
+import listUsersValidator from "../validator/list-users-validator";
 
 const tenantRouter = Router();
 const userRepository = AppDataSource.getRepository(Tenant);
@@ -19,6 +20,45 @@ tenantRouter.post(
   canAccess([roles.ADMIN]),
   async (req: Request, res: Response, next: NextFunction) => {
     await tenantController.create(req, res, next);
+  }
+);
+
+tenantRouter.get(
+  "/",
+  listUsersValidator,
+  async (req: Request, res: Response, next: NextFunction) => {
+    await tenantController.getAll(req, res, next);
+  }
+);
+
+tenantRouter.patch(
+  "/:id",
+  listUsersValidator,
+  async (req: Request, res: Response, next: NextFunction) => {
+    await tenantController.update(req, res, next);
+  }
+);
+tenantRouter.get(
+  "/:id",
+  listUsersValidator,
+  async (req: Request, res: Response, next: NextFunction) => {
+    await tenantController.getOne(req, res, next);
+  }
+);
+
+tenantRouter.delete(
+  "/:id",
+  listUsersValidator,
+  async (req: Request, res: Response, next: NextFunction) => {
+    await tenantController.deleteOne(req, res, next);
+  }
+);
+
+tenantRouter.delete(
+  "/",
+  listUsersValidator,
+  async (req: Request, res: Response, next: NextFunction) => {
+    await tenantController.deleteAll(req, res, next);
   }
 );
 

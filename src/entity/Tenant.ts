@@ -10,12 +10,16 @@ import {
 export class Tenant {
   @PrimaryGeneratedColumn()
   id: number;
+
   @Column("varchar", { length: 100 })
   name: string;
+
   @Column("varchar", { length: 200 })
   address: string;
+
   @UpdateDateColumn()
-  updatedAt: number;
+  updatedAt: Date;
+
   @CreateDateColumn()
-  createdAt: number;
+  createdAt: Date;
 }

@@ -35,3 +35,9 @@ export interface ITenant {
 export interface ICreateTenantReqest extends Request {
   body: ITenant;
 }
+
+export interface TenantQueryParams {
+  q: string;
+  perPage: number;
+  currentPage: number;
+}
