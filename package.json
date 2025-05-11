@@ -13,7 +13,7 @@
     "start": "ts-node src/index.ts",
     "migration:generate": "cross-env NODE_ENV=dev typeorm-ts-node-commonjs -d src/config/data-source.ts migration:generate",
     "migration:run": "cross-env NODE_ENV=dev typeorm-ts-node-commonjs -d src/config/data-source.ts migration:run",
-    "migration:create": "cross-env NODE_ENV=dev typeorm-ts-node-commonjs -d src/config/data-source.ts migration:create"
+    "migration:create": "cross-env NODE_ENV=dev typeorm-ts-node-commonjs migration:create"
   },
   "repository": {
     "type": "git",
