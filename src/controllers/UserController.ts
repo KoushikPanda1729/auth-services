@@ -1,10 +1,9 @@
-import { NextFunction, Response, Request } from "express";
+import { NextFunction, Request, Response } from "express";
 import { matchedData, validationResult } from "express-validator";
+import createHttpError from "http-errors";
 import { Logger } from "winston";
-import { roles } from "../constants";
 import { UserService } from "../services/UserService";
 import { IRequestBody, IUpdateUserRequest, UserQueryParams } from "../types";
-import createHttpError from "http-errors";
 
 export class UserController {
   constructor(
@@ -17,14 +16,15 @@ export class UserController {
     if (!result.isEmpty()) {
       return res.status(400).json({ errors: result.array() });
     }
-    const { firstName, lastName, gmail, password } = req.body;
+    const { firstName, lastName, gmail, password, role, tenantId } = req.body;
     try {
       const user = await this.userService.create({
         firstName,
         lastName,
         gmail,
         password,
-        role: roles.MANAGER,
+        role,
+        tenantId,
       });
       this.logger.info("User created successfully", { id: user.id });
       res.status(201).json({ id: user.id });

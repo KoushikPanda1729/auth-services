@@ -55,7 +55,7 @@ export class AuthController {
       return res.status(400).json({ errors: result.array() });
     }
 
-    const { firstName, lastName, gmail, password } = req.body;
+    const { firstName, lastName, gmail, password, tenantId } = req.body;
 
     this.logger.debug("New user registered", {
       firstName,
@@ -70,6 +70,7 @@ export class AuthController {
         gmail,
         password,
         role: roles.CUSTOMER,
+        tenantId,
       });
       this.logger.info("User registered successfully", { id: user.id });
 
@@ -107,7 +108,7 @@ export class AuthController {
     });
 
     try {
-      const user = await this.UserService.findByEmail(gmail);
+      const user = await this.UserService.findByEmailAndPassword(gmail);
       if (!user) {
         const err = createHttpError(400, "Email or password not matched");
         next(err);

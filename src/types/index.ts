@@ -5,6 +5,7 @@ export interface IUserData {
   gmail: string;
   password: string;
   role: string;
+  tenantId: number;
 }
 
 export interface IRequestBody extends Request {

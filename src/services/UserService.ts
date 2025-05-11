@@ -9,7 +9,14 @@ export class UserService {
   constructor(userRepository: Repository<User>) {
     this.userRepository = userRepository;
   }
-  async create({ firstName, lastName, gmail, password, role }: IUserData) {
+  async create({
+    firstName,
+    lastName,
+    gmail,
+    password,
+    role,
+    tenantId,
+  }: IUserData) {
     const user = await this.userRepository.findOne({ where: { gmail: gmail } });
     if (user) {
       const error = createHttpError(400, "User is already exists ! ");
@@ -25,6 +32,7 @@ export class UserService {
         gmail,
         password: hashedPassword,
         role,
+        tenantId,
       });
       return user;
     } catch {
@@ -33,10 +41,11 @@ export class UserService {
     }
   }
 
-  async findByEmail(gmail: string) {
+  async findByEmailAndPassword(gmail: string) {
     try {
       const user = await this.userRepository.findOne({
         where: { gmail: gmail },
+        select: ["id", "firstName", "lastName", "gmail", "role", "password"],
       });
       return user;
     } catch {

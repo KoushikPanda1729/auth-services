@@ -100,6 +100,7 @@ describe("POST /users", () => {
       gmail: "jane@example.com",
       password: "securepass",
       tenantId: 1,
+      role: roles.MANAGER,
     };
 
     const response = await request(app)
@@ -146,7 +147,7 @@ describe("POST /users", () => {
       gmail: "test@123gmail.com",
       password: "12345",
       tenantId: tenant.id,
-      role: roles.ADMIN,
+      role: roles.MANAGER,
     };
 
     const userRepository = connection.getRepository(User);
@@ -160,7 +161,7 @@ describe("POST /users", () => {
       firstName: "Alex",
       lastName: "Jonson",
       gmail: "test@123gmail.com",
-      role: roles.ADMIN,
+      role: roles.MANAGER,
       tenantId: secondTenant.id,
     };
 

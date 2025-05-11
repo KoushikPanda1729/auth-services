@@ -11,7 +11,7 @@ export class User {
   lastName: string;
   @Column({ unique: true })
   gmail: string;
-  @Column()
+  @Column({ select: false })
   password: string;
   @Column()
   role: string;
