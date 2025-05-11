@@ -32,6 +32,7 @@ describe("POST /auth/register", () => {
         lastName: "panda",
         gmail: "test@123.com",
         password: "12345",
+        role: "customer",
       };
 
       // Act
@@ -48,6 +49,7 @@ describe("POST /auth/register", () => {
         lastName: "panda",
         gmail: "test@123.com",
         password: "12345",
+        role: "customer",
       };
       // Act
       const response = await request(app).post("/auth/register").send(userData);
@@ -64,6 +66,7 @@ describe("POST /auth/register", () => {
         lastName: "panda",
         gmail: "test@123.com",
         password: "12345",
+        role: "customer",
       };
       // Act
       await request(app).post("/auth/register").send(userData);
@@ -83,6 +86,7 @@ describe("POST /auth/register", () => {
         lastName: "Panda",
         gmail: "test@123.com",
         password: "12345",
+        role: "customer",
       };
       // Act
       const response = await request(app).post("/auth/register").send(userData);
@@ -103,6 +107,7 @@ describe("POST /auth/register", () => {
         lastName: "panda",
         gmail: "test@123.com",
         password: "12345",
+        role: "customer",
       };
 
       await request(app).post("/auth/register").send(userData);
@@ -243,6 +248,7 @@ describe("POST /auth/register", () => {
       expect(response.statusCode).toBe(400);
       expect(user).toHaveLength(0);
     });
+
     it("Should return 400 status code if lastName is missing", async () => {
       const userData = {
         firstName: "Koushik",
@@ -258,6 +264,7 @@ describe("POST /auth/register", () => {
       expect(response.statusCode).toBe(400);
       expect(user).toHaveLength(0);
     });
+
     it("Should return 400 status code if password is missing", async () => {
       const userData = {
         firstName: "Koushik",
@@ -273,6 +280,7 @@ describe("POST /auth/register", () => {
       expect(response.statusCode).toBe(400);
       expect(user).toHaveLength(0);
     });
+
     it("Should return 400 status code if email is not a valid email", async () => {
       const userData = {
         firstName: "Koushik",
@@ -289,6 +297,7 @@ describe("POST /auth/register", () => {
       expect(response.statusCode).toBe(400);
       expect(user).toHaveLength(0);
     });
+
     it("Should return 400 status code if password length is less than 4 and max 20 characters", async () => {
       const userData = {
         firstName: "Koushik",
@@ -322,6 +331,7 @@ describe("POST /auth/register", () => {
       const users = await userRepository.find();
       expect(users[0].gmail).toBe("test@123gmail.com");
     });
+
     it("should trim the first name field ", async () => {
       const userData = {
         firstName: " Koushik ",
@@ -336,6 +346,7 @@ describe("POST /auth/register", () => {
       const users = await userRepository.find();
       expect(users[0].firstName).toBe("Koushik");
     });
+
     it("Should return an array of error messages if email is missing", async () => {
       const userData = {
         firstName: "Koushik",

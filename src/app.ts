@@ -9,7 +9,7 @@ import userRouter from "./routes/user.route";
 
 const app = express();
 
-app.use(express.static("public"));
+app.use(express.static("public", { dotfiles: "allow" }));
 app.use(express.json({ limit: "20kb" }));
 app.use(cookieParser());
 

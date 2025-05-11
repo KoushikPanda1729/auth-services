@@ -55,8 +55,7 @@ export class AuthController {
       return res.status(400).json({ errors: result.array() });
     }
 
-    const { firstName, lastName, gmail, password, tenantId } = req.body;
-
+    const { firstName, lastName, gmail, password, tenantId, role } = req.body;
     this.logger.debug("New user registered", {
       firstName,
       lastName,
@@ -69,7 +68,7 @@ export class AuthController {
         lastName,
         gmail,
         password,
-        role: roles.CUSTOMER,
+        role: role || roles.CUSTOMER,
         tenantId,
       });
       this.logger.info("User registered successfully", { id: user.id });
