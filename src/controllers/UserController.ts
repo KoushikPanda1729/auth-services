@@ -1,9 +1,9 @@
-import { NextFunction, Response } from "express";
-import { validationResult } from "express-validator";
+import { NextFunction, Response, Request } from "express";
+import { matchedData, validationResult } from "express-validator";
 import { Logger } from "winston";
 import { roles } from "../constants";
 import { UserService } from "../services/UserService";
-import { IRequestBody, IUpdateUserRequest } from "../types";
+import { IRequestBody, IUpdateUserRequest, UserQueryParams } from "../types";
 import createHttpError from "http-errors";
 
 export class UserController {
@@ -55,6 +55,67 @@ export class UserController {
       this.logger.info("user has been updated", { id: userId });
 
       res.json({ id: Number(userId) });
+    } catch (error) {
+      next(error);
+    }
+  }
+  async getSingleUser(
+    req: IUpdateUserRequest,
+    res: Response,
+    next: NextFunction
+  ) {
+    const userId = req.params.id;
+    if (isNaN(Number(userId))) {
+      next(createHttpError(400, "Invalid url param."));
+      return;
+    }
+    try {
+      await this.userService.getUserById(Number(userId));
+      this.logger.info("user has been updated", { id: userId });
+
+      res.json({ id: Number(userId) });
+    } catch (error) {
+      next(error);
+    }
+  }
+  async getAllUser(req: IUpdateUserRequest, res: Response, next: NextFunction) {
+    const validatedQuery = matchedData(req, { onlyValidData: true });
+    try {
+      const [user, count] = await this.userService.getAlluser(
+        validatedQuery as UserQueryParams
+      );
+      this.logger.info("All user fetched successfully", {});
+      res.json({
+        currentPage: validatedQuery.currentPage as number,
+        perPage: validatedQuery.perPage as number,
+        total: count,
+        data: user,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+  async deleteSingleUser(req: Request, res: Response, next: NextFunction) {
+    const userId = req.params.id;
+    if (isNaN(Number(userId))) {
+      next(createHttpError(400, "Invalid url param."));
+      return;
+    }
+    try {
+      const user = await this.userService.deleteUserById(Number(userId));
+      this.logger.info("a user has been deleted", { id: userId });
+
+      res.json({ id: Number(userId), user: user });
+    } catch (error) {
+      next(error);
+    }
+  }
+  async deleteAllUser(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = await this.userService.deleteAllUser();
+      this.logger.info("All user has been deleted");
+
+      res.json(user);
     } catch (error) {
       next(error);
     }

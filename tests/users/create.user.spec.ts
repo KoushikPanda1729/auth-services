@@ -159,7 +159,7 @@ describe("POST /users", () => {
     const updatedUserData = {
       firstName: "Alex",
       lastName: "Jonson",
-      gmail: "    test@123gmail.com",
+      gmail: "test@123gmail.com",
       role: roles.ADMIN,
       tenantId: secondTenant.id,
     };
@@ -180,5 +180,124 @@ describe("POST /users", () => {
     expect(updatedUser?.firstName).toBe("Alex");
     expect(updatedUser?.lastName).toBe("Jonson");
     expect(updatedUser?.tenant.id).toBe(secondTenant.id);
+  });
+
+  it("should return 200 status code and a single user", async () => {
+    const accessToken = jwks.token({ sub: String(1), role: roles.ADMIN });
+    const tenantRepository = connection.getRepository(Tenant);
+    const tenant = await tenantRepository.save({
+      name: "Test Tenant",
+      address: "123 Test St",
+    });
+    const userData = {
+      firstName: "Koushik",
+      lastName: "panda",
+      gmail: "test@123gmail.com",
+      password: "12345",
+      tenantId: tenant.id,
+      role: roles.ADMIN,
+    };
+
+    const userRepository = connection.getRepository(User);
+    const user = await userRepository.save(userData);
+    const response = await request(app)
+      .get(`/users/${user.id}`)
+      .set("Cookie", [`accessToken=${accessToken}`])
+      .send();
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toHaveProperty("id", user.id);
+  });
+
+  it("should return 200 status code and all user", async () => {
+    const accessToken = jwks.token({ sub: String(1), role: roles.ADMIN });
+    const tenantRepository = connection.getRepository(Tenant);
+    const tenant = await tenantRepository.save({
+      name: "Test Tenant",
+      address: "123 Test St",
+    });
+    const userData = {
+      firstName: "Koushik",
+      lastName: "panda",
+      gmail: "test@123gmail.com",
+      password: "12345",
+      tenantId: tenant.id,
+      role: roles.ADMIN,
+    };
+    const userData2 = {
+      firstName: "Koushik",
+      lastName: "panda",
+      gmail: "test1@123gmail.com",
+      password: "12345",
+      tenantId: tenant.id,
+      role: roles.ADMIN,
+    };
+
+    const userRepository = connection.getRepository(User);
+    await userRepository.save([userData, userData2]);
+    const response = await request(app)
+      .get(`/users`)
+      .set("Cookie", [`accessToken=${accessToken}`]);
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toHaveProperty("data");
+  });
+
+  it("should return 200 status code if a user is deleted", async () => {
+    const accessToken = jwks.token({ sub: String(1), role: roles.ADMIN });
+    const tenantRepository = connection.getRepository(Tenant);
+    const tenant = await tenantRepository.save({
+      name: "Test Tenant",
+      address: "123 Test St",
+    });
+    const userData = {
+      firstName: "Koushik",
+      lastName: "panda",
+      gmail: "test@123gmail.com",
+      password: "12345",
+      tenantId: tenant.id,
+      role: roles.ADMIN,
+    };
+
+    const userRepository = connection.getRepository(User);
+    const user = await userRepository.save(userData);
+    const response = await request(app)
+      .delete(`/users/${user.id}`)
+      .set("Cookie", [`accessToken=${accessToken}`])
+      .send();
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toHaveProperty("id", user.id);
+    expect((response.body as Record<string, string>).user).toHaveProperty(
+      "affected",
+      1
+    );
+    expect((response.body as Record<string, string>).user).toHaveProperty(
+      "raw"
+    );
+  });
+
+  it("should return 200 status code if all user is deleted", async () => {
+    const accessToken = jwks.token({ sub: String(1), role: roles.ADMIN });
+    const tenantRepository = connection.getRepository(Tenant);
+    const tenant = await tenantRepository.save({
+      name: "Test Tenant",
+      address: "123 Test St",
+    });
+    const userData = {
+      firstName: "Koushik",
+      lastName: "panda",
+      gmail: "test@123gmail.com",
+      password: "12345",
+      tenantId: tenant.id,
+      role: roles.ADMIN,
+    };
+
+    const userRepository = connection.getRepository(User);
+    await userRepository.save(userData);
+    const response = await request(app)
+      .delete(`/users`)
+      .set("Cookie", [`accessToken=${accessToken}`])
+      .send();
+    expect(Array.isArray(response.body)).toBe(true);
+    expect(response.body).toHaveLength(1);
   });
 });

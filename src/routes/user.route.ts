@@ -9,6 +9,7 @@ import { User } from "../entity/User";
 import { UserService } from "../services/UserService";
 import createUserValidators from "../validator/create-user-validators";
 import updateUserValidator from "../validator/update-user-validator";
+import listUsersValidator from "../validator/list-users-validator";
 
 const userRouter = Router();
 const userRepository = AppDataSource.getRepository(User);
@@ -31,6 +32,40 @@ userRouter.patch(
   canAccess([roles.ADMIN]),
   async (req: Request, res: Response, next: NextFunction) => {
     await userController.update(req, res, next);
+  }
+);
+userRouter.get(
+  "/:id",
+  authenticate,
+  canAccess([roles.ADMIN]),
+  async (req: Request, res: Response, next: NextFunction) => {
+    await userController.getSingleUser(req, res, next);
+  }
+);
+userRouter.get(
+  "/",
+  listUsersValidator,
+  authenticate,
+  canAccess([roles.ADMIN]),
+  async (req: Request, res: Response, next: NextFunction) => {
+    await userController.getAllUser(req, res, next);
+  }
+);
+
+userRouter.delete(
+  "/:id",
+  authenticate,
+  canAccess([roles.ADMIN]),
+  async (req: Request, res: Response, next: NextFunction) => {
+    await userController.deleteSingleUser(req, res, next);
+  }
+);
+userRouter.delete(
+  "/",
+  authenticate,
+  canAccess([roles.ADMIN]),
+  async (req: Request, res: Response, next: NextFunction) => {
+    await userController.deleteAllUser(req, res, next);
   }
 );
 
