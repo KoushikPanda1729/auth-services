@@ -54,6 +54,7 @@ describe("POST /users", () => {
       gmail: "duplicate@gmail.com",
       password: "pass123",
       tenantId: 1,
+      role: roles.MANAGER,
     };
 
     // First create user
@@ -196,7 +197,7 @@ describe("POST /users", () => {
       gmail: "test@123gmail.com",
       password: "12345",
       tenantId: tenant.id,
-      role: roles.ADMIN,
+      role: roles.MANAGER,
     };
 
     const userRepository = connection.getRepository(User);
@@ -222,7 +223,7 @@ describe("POST /users", () => {
       gmail: "test@123gmail.com",
       password: "12345",
       tenantId: tenant.id,
-      role: roles.ADMIN,
+      role: roles.MANAGER,
     };
     const userData2 = {
       firstName: "Koushik",
@@ -230,7 +231,7 @@ describe("POST /users", () => {
       gmail: "test1@123gmail.com",
       password: "12345",
       tenantId: tenant.id,
-      role: roles.ADMIN,
+      role: roles.MANAGER,
     };
 
     const userRepository = connection.getRepository(User);
@@ -256,7 +257,7 @@ describe("POST /users", () => {
       gmail: "test@123gmail.com",
       password: "12345",
       tenantId: tenant.id,
-      role: roles.ADMIN,
+      role: roles.MANAGER,
     };
 
     const userRepository = connection.getRepository(User);
@@ -289,7 +290,7 @@ describe("POST /users", () => {
       gmail: "test@123gmail.com",
       password: "12345",
       tenantId: tenant.id,
-      role: roles.ADMIN,
+      role: roles.MANAGER,
     };
 
     const userRepository = connection.getRepository(User);
