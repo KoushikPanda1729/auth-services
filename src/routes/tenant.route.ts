@@ -33,6 +33,7 @@ tenantRouter.get(
 
 tenantRouter.patch(
   "/:id",
+  authenticate,
   listUsersValidator,
   async (req: Request, res: Response, next: NextFunction) => {
     await tenantController.update(req, res, next);
@@ -40,6 +41,7 @@ tenantRouter.patch(
 );
 tenantRouter.get(
   "/:id",
+  authenticate,
   listUsersValidator,
   async (req: Request, res: Response, next: NextFunction) => {
     await tenantController.getOne(req, res, next);
@@ -48,6 +50,7 @@ tenantRouter.get(
 
 tenantRouter.delete(
   "/:id",
+  authenticate,
   listUsersValidator,
   async (req: Request, res: Response, next: NextFunction) => {
     await tenantController.deleteOne(req, res, next);
@@ -56,6 +59,7 @@ tenantRouter.delete(
 
 tenantRouter.delete(
   "/",
+  authenticate,
   listUsersValidator,
   async (req: Request, res: Response, next: NextFunction) => {
     await tenantController.deleteAll(req, res, next);
