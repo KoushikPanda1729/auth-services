@@ -48,3 +48,36 @@ This service is a part of a microservices architecture and is responsible for ha
 ## Work in Progress
 
 This project is currently under development. Some features may not be fully implemented or stable. Contributions and feedback are welcome to help improve the service.
+
+## Testing
+
+To ensure the service works as expected, you can run the following tests:
+
+1. Run unit tests:
+   ```bash
+   npm test
+   ```
+2. Check code coverage:
+   ```bash
+   npm run coverage
+   ```
+
+## Contribution Guidelines
+
+We welcome contributions to improve the Auth Service. To contribute:
+
+1. Fork the repository.
+2. Create a new branch for your feature or bug fix:
+   ```bash
+   git checkout -b feature-name
+   ```
+3. Commit your changes and push the branch:
+   ```bash
+   git commit -m "Description of changes"
+   git push origin feature-name
+   ```
+4. Open a pull request and describe your changes.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
