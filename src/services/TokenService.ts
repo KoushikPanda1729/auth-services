@@ -1,7 +1,5 @@
-import fs from "fs";
 import createHttpError from "http-errors";
 import { JwtPayload, sign } from "jsonwebtoken";
-import path from "path";
 import { Repository } from "typeorm";
 import { Config } from "../config";
 import { RefreshToken } from "../entity/RefreshToken";
@@ -11,11 +9,13 @@ export class TokenService {
   constructor(private TokenRepository: Repository<RefreshToken>) {}
 
   generateAccessToken(payload: JwtPayload) {
-    let privateKey: Buffer;
+    let privateKey: string;
+    if (!Config.PRIVATE_KEY) {
+      const error = createHttpError(500, "Private key is missing");
+      throw error;
+    }
     try {
-      privateKey = fs.readFileSync(
-        path.join(__dirname, "../../scripts/certs/privateKey.pem")
-      );
+      privateKey = Config.PRIVATE_KEY;
     } catch {
       const error = createHttpError(
         500,
