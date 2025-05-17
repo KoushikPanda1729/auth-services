@@ -37,8 +37,8 @@ describe("POST /auth/logout", () => {
     }
     const cookies =
       (response.headers as unknown as Headers)["set-cookie"] || [];
-    let refreshToken = null;
-    let accessToken = null;
+    let refreshToken: string | null = null;
+    let accessToken: string | null = null;
     cookies.forEach((cookie) => {
       if (cookie.startsWith("refreshToken=")) {
         refreshToken = cookie.split(";")[0].split("=")[1];
@@ -88,8 +88,8 @@ describe("POST /auth/logout", () => {
       "set-cookie": string[];
     }
     const cookies = (response.headers as unknown as Header)["set-cookie"] || [];
-    let refreshToken = null;
-    let acccessToken = null;
+    let refreshToken: string | null = null;
+    let acccessToken: string | null = null;
     cookies.forEach((cookie) => {
       if (cookie.startsWith("refreshToken=")) {
         refreshToken = cookie.split(";")[0].split("=")[1];
