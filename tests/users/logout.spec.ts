@@ -51,7 +51,7 @@ describe("POST /auth/logout", () => {
     return { refreshToken, accessToken };
   };
 
-  it.skip("should return 200 status code", async () => {
+  it("should return 200 status code", async () => {
     const { accessToken, refreshToken } = await registerAndLogin();
 
     const response = await request(app)
@@ -64,7 +64,7 @@ describe("POST /auth/logout", () => {
     expect(response.statusCode).toBe(200);
   });
 
-  it.skip("should return 401 status code if your is not authenticated", async () => {
+  it("should return 401 status code if your is not authenticated", async () => {
     const response = await request(app)
       .post("/auth/logout")
       .set("Cookie", [`refreshToken=${""}`])
@@ -73,7 +73,7 @@ describe("POST /auth/logout", () => {
     expect(response.statusCode).toBe(401);
   });
 
-  it.skip("should return 200 status code if user sucessfully logged out", async () => {
+  it("should return 200 status code if user sucessfully logged out", async () => {
     const { accessToken, refreshToken: loginRefreshToken } =
       await registerAndLogin();
 
