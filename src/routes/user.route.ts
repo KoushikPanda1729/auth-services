@@ -1,4 +1,10 @@
-import { NextFunction, Request, Response, Router } from "express";
+import {
+  NextFunction,
+  Request,
+  RequestHandler,
+  Response,
+  Router,
+} from "express";
 import authenticate from "../../middlewares/authenticate";
 import { canAccess } from "../../middlewares/canAccess";
 import { AppDataSource } from "../config/data-source";
@@ -21,52 +27,53 @@ userRouter.post(
   createUserValidators,
   authenticate,
   canAccess([roles.ADMIN]),
-  async (req: Request, res: Response, next: NextFunction) => {
+  (async (req: Request, res: Response, next: NextFunction) => {
     await userController.create(req, res, next);
-  }
+  }) as RequestHandler
 );
+
 userRouter.patch(
   "/:id",
   updateUserValidator,
   authenticate,
   canAccess([roles.ADMIN]),
-  async (req: Request, res: Response, next: NextFunction) => {
+  (async (req: Request, res: Response, next: NextFunction) => {
     await userController.update(req, res, next);
-  }
+  }) as RequestHandler
 );
-userRouter.get(
-  "/:id",
-  authenticate,
-  canAccess([roles.ADMIN]),
-  async (req: Request, res: Response, next: NextFunction) => {
-    await userController.getSingleUser(req, res, next);
-  }
-);
+
+userRouter.get("/:id", authenticate, canAccess([roles.ADMIN]), (async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  await userController.getSingleUser(req, res, next);
+}) as RequestHandler);
+
 userRouter.get(
   "/",
   listUsersValidator,
   authenticate,
   canAccess([roles.ADMIN]),
-  async (req: Request, res: Response, next: NextFunction) => {
+  (async (req: Request, res: Response, next: NextFunction) => {
     await userController.getAllUser(req, res, next);
-  }
+  }) as RequestHandler
 );
 
-userRouter.delete(
-  "/:id",
-  authenticate,
-  canAccess([roles.ADMIN]),
-  async (req: Request, res: Response, next: NextFunction) => {
-    await userController.deleteSingleUser(req, res, next);
-  }
-);
-userRouter.delete(
-  "/",
-  authenticate,
-  canAccess([roles.ADMIN]),
-  async (req: Request, res: Response, next: NextFunction) => {
-    await userController.deleteAllUser(req, res, next);
-  }
-);
+userRouter.delete("/:id", authenticate, canAccess([roles.ADMIN]), (async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  await userController.deleteSingleUser(req, res, next);
+}) as RequestHandler);
+
+userRouter.delete("/", authenticate, canAccess([roles.ADMIN]), (async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  await userController.deleteAllUser(req, res, next);
+}) as RequestHandler);
 
 export default userRouter;

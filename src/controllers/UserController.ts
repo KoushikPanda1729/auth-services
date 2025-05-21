@@ -7,8 +7,8 @@ import { IRequestBody, IUpdateUserRequest, UserQueryParams } from "../types";
 
 export class UserController {
   constructor(
-    private userService: UserService,
-    private logger: Logger
+    private readonly userService: UserService,
+    private readonly logger: Logger
   ) {}
 
   async create(req: IRequestBody, res: Response, next: NextFunction) {
