@@ -2,19 +2,25 @@ import request from "supertest";
 import app from "../../src/app";
 import { DataSource } from "typeorm";
 import { AppDataSource } from "../../src/config/data-source";
+import { createJWKSMock, JWKSMock } from "mock-jwks";
+import { roles } from "../../src/constants";
 
 describe("POST /auth/logout", () => {
   let connection: DataSource;
-
+  let jwks: JWKSMock;
   beforeAll(async () => {
+    jwks = createJWKSMock("http://localhost:8000");
     connection = await AppDataSource.initialize();
   });
 
   beforeEach(async () => {
+    jwks.start();
     await connection.dropDatabase();
     await connection.synchronize();
   });
-
+  afterEach(() => {
+    jwks.stop();
+  });
   afterAll(async () => {
     await connection.destroy();
   });
@@ -52,7 +58,9 @@ describe("POST /auth/logout", () => {
   };
 
   it("should return 200 status code", async () => {
-    const { accessToken, refreshToken } = await registerAndLogin();
+    const { refreshToken } = await registerAndLogin();
+
+    const accessToken = jwks.token({ sub: String(1), role: roles.ADMIN });
 
     const response = await request(app)
       .post("/auth/logout")
@@ -74,8 +82,9 @@ describe("POST /auth/logout", () => {
   });
 
   it("should return 200 status code if user sucessfully logged out", async () => {
-    const { accessToken, refreshToken: loginRefreshToken } =
-      await registerAndLogin();
+    const { refreshToken: loginRefreshToken } = await registerAndLogin();
+
+    const accessToken = jwks.token({ sub: String(1), role: roles.ADMIN });
 
     const response = await request(app)
       .post("/auth/logout")

@@ -82,8 +82,8 @@ describe("POST /auth/login", () => {
       }
       const cookies =
         (response.headers as unknown as Headers)["set-cookie"] || [];
-      let accessToken = null;
-      let refreshToken = null;
+      let accessToken: string | null = null;
+      let refreshToken: string | null = null;
       cookies.forEach((cookie) => {
         if (cookie.startsWith("accessToken=")) {
           accessToken = cookie.split(";")[0].split("=")[1];
