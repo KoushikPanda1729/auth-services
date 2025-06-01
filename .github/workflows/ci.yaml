@@ -100,10 +100,14 @@ jobs:
         run: npm ci
 
       - name: Run ESLint
-        run: npm run lint
+        run: |
+          echo "Running lint..."
+          npm run lint || (echo "Lint failed" && cat /home/runner/.npm/_logs/*-debug-0.log && exit 1)
 
       - name: Run Tests and Coverage
-        run: npm run test
+        run: |
+          echo "Running tests..."
+          npm run test || (echo "Tests failed" && cat /home/runner/.npm/_logs/*-debug-0.log && exit 1)
         env:
           DB_HOST: localhost
           DB_PORT: 5432
@@ -115,7 +119,9 @@ jobs:
           PRIVATE_KEY: dummy_private_key
 
       - name: Build TypeScript
-        run: npm run build
+        run: |
+          echo "Running TypeScript build..."
+          npm run build || (echo "Build failed" && cat /home/runner/.npm/_logs/*-debug-0.log && exit 1)
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
@@ -143,7 +149,11 @@ jobs:
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
       - name: Build Docker Image
-        run: docker build -t ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} -f docker/prod/Dockerfile .
+        run: |
+          echo "Building Docker image..."
+          docker build -t ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} -f docker/prod/Dockerfile .
 
       - name: Push Docker Image to Docker Hub
-        run: docker push ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+        run: |
+          echo "Pushing Docker image..."
+          docker push ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
