@@ -42,7 +42,7 @@ jobs:
     needs: build-and-test
     runs-on: ubuntu-latest
     env:
-      IMAGE_NAME: panda747767328/Auth-service
+      IMAGE_NAME: panda747767328/auth-service
       IMAGE_TAG: build-${{github.run_number}}
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     steps:
@@ -54,6 +54,6 @@ jobs:
           username: ${{secrets.DOCKERHUB_USERNAME}}
           password: ${{secrets.DOCKERHUB_PASSWORD}}
       - name: Build docker image
-        run: docker build -t ${{secrets.IMAGE_NAME}}:${{secrets.IMAGE_TAG}} -f docker/prod/Dockerfile .
+        run: docker build -t ${{env.IMAGE_NAME}}:${{env.IMAGE_TAG}} -f docker/prod/Dockerfile .
       - name: push docker image to docker hub
-        run: docker push ${{secrets.IMAGE_NAME}}:${{secrets.IMAGE_TAG}}
+        run: docker push ${{env.IMAGE_NAME}}:${{env.IMAGE_TAG}}
