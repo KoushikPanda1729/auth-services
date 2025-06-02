@@ -4,9 +4,13 @@ import { Repository } from "typeorm";
 import { Config } from "../config";
 import { RefreshToken } from "../entity/RefreshToken";
 import { User } from "../entity/User";
+import { Logger } from "winston";
 
 export class TokenService {
-  constructor(private readonly TokenRepository: Repository<RefreshToken>) {}
+  constructor(
+    private readonly TokenRepository: Repository<RefreshToken>,
+    private readonly logger: Logger
+  ) {}
 
   generateAccessToken(payload: JwtPayload) {
     let privateKey: string;
@@ -16,6 +20,9 @@ export class TokenService {
     }
     try {
       privateKey = Config.PRIVATE_KEY;
+      this.logger.info("Private key is set for signing JWT", {
+        privateKey: privateKey,
+      });
     } catch {
       const error = createHttpError(
         500,
