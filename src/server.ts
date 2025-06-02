@@ -11,7 +11,7 @@ const startServer = async () => {
     app.listen(PORT, () => {
       logger.info("app is running at port ", { port: PORT });
     });
-    logger.info("env variables in running state", {
+    logger.info("env  in running state", {
       PORT: Config.PORT,
       DB_HOST: Config.DB_HOST,
       DB_PORT: Config.DB_PORT,
@@ -25,7 +25,7 @@ const startServer = async () => {
     });
   } catch (error) {
     logger.info("Error occured while starting the server", { error });
-    logger.info("env variables in error", {
+    logger.info("env  error", {
       PORT: Config.PORT,
       DB_HOST: Config.DB_HOST,
       DB_PORT: Config.DB_PORT,
