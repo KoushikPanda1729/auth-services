@@ -25,7 +25,7 @@ const authRouter = Router();
 const userRepository = AppDataSource.getRepository(User);
 const tokenRepository = AppDataSource.getRepository(RefreshToken);
 const userService = new UserService(userRepository);
-const tokenService = new TokenService(tokenRepository);
+const tokenService = new TokenService(tokenRepository, logger);
 const credentialsService = new CredentialsService();
 const authController = new AuthController(
   userService,
