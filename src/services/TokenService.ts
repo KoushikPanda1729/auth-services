@@ -19,7 +19,7 @@ export class TokenService {
       throw error;
     }
     try {
-      privateKey = Config.PRIVATE_KEY.replace(/\\n/g, "\n");
+      privateKey = Config.PRIVATE_KEY;
       this.logger.info("Private key is set for signing JWT", {
         privateKey: privateKey,
       });
