@@ -11,18 +11,6 @@ const startServer = async () => {
     app.listen(PORT, () => {
       logger.info("app is running at port ", { port: PORT });
     });
-    logger.info("env  in running state", {
-      PORT: Config.PORT,
-      DB_HOST: Config.DB_HOST,
-      DB_PORT: Config.DB_PORT,
-      DB_USERNAME: Config.DB_USERNAME,
-      DB_PASSWORD: Config.DB_PASSWORD,
-      DB_NAME: Config.DB_NAME,
-      REFRESH_TOKEN_SECRET: Config.REFRESH_TOKEN_SECRET,
-      JWKS_URI: Config.JWKS_URI,
-      PRIVATE_KEY: Config.PRIVATE_KEY,
-      DB_SSL: Config.DB_SSL,
-    });
   } catch (error) {
     logger.info("Error occured while starting the server", { error });
     logger.info("env  error", {
