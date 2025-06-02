@@ -1,28 +1,41 @@
-import { config } from "dotenv";
 import app from "./app";
 import { logger } from "./config/logger";
 import { AppDataSource } from "./config/data-source";
-
-config();
+import { Config } from "./config";
 
 const startServer = async () => {
-  const { PORT } = process.env;
+  const { PORT } = Config;
   try {
     await AppDataSource.initialize();
     logger.info("Database connected successfully");
     app.listen(PORT, () => {
       logger.info("app is running at port ", { port: PORT });
     });
+    logger.info("env variables in running state", {
+      PORT: Config.PORT,
+      DB_HOST: Config.DB_HOST,
+      DB_PORT: Config.DB_PORT,
+      DB_USERNAME: Config.DB_USERNAME,
+      DB_PASSWORD: Config.DB_PASSWORD,
+      DB_NAME: Config.DB_NAME,
+      REFRESH_TOKEN_SECRET: Config.REFRESH_TOKEN_SECRET,
+      JWKS_URI: Config.JWKS_URI,
+      PRIVATE_KEY: Config.PRIVATE_KEY,
+      DB_SSL: Config.DB_SSL,
+    });
   } catch (error) {
     logger.info("Error occured while starting the server", { error });
-    logger.info("env variables", {
-      PORT,
-      NODE_ENV: process.env.NODE_ENV,
-      DATABASE_URL: process.env.DATABASE_URL,
-      DATABASE_NAME: process.env.DATABASE_NAME,
-      DATABASE_USERNAME: process.env.DATABASE_USERNAME,
-      DATABASE_PASSWORD: process.env.DATABASE_PASSWORD,
-      DATABASE_HOST: process.env.DATABASE_HOST,
+    logger.info("env variables in error", {
+      PORT: Config.PORT,
+      DB_HOST: Config.DB_HOST,
+      DB_PORT: Config.DB_PORT,
+      DB_USERNAME: Config.DB_USERNAME,
+      DB_PASSWORD: Config.DB_PASSWORD,
+      DB_NAME: Config.DB_NAME,
+      REFRESH_TOKEN_SECRET: Config.REFRESH_TOKEN_SECRET,
+      JWKS_URI: Config.JWKS_URI,
+      PRIVATE_KEY: Config.PRIVATE_KEY,
+      DB_SSL: Config.DB_SSL,
     });
 
     process.exit(1);
