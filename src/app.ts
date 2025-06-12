@@ -11,12 +11,27 @@ import "reflect-metadata";
 import cookieParser from "cookie-parser";
 import tenantRouter from "./routes/tenant.route";
 import userRouter from "./routes/user.route";
-
+import cors from "cors";
+import { Config } from "./config";
 const app = express();
 
 app.use(express.static("public", { dotfiles: "allow" }));
 app.use(express.json({ limit: "20kb" }));
 app.use(cookieParser());
+app.use(
+  cors({
+    origin: Config.CORS_ORIGIN || "http://localhost:5173",
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "X-Requested-With",
+      "Accept",
+      "Origin",
+    ],
+  })
+);
 
 app.use("/auth", authRouter);
 app.use("/tenants", tenantRouter);
