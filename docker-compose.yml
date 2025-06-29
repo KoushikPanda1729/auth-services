@@ -1,18 +1,51 @@
-version: "3.8"
-
 services:
+  # Database for development
   auth-service-pg-container:
-    image: postgres:latest
-    container_name: auth-service-pg-container
+    image: postgres:13
+    container_name: auth-service-pg-dev
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
       POSTGRES_DB: auth_service_dev
+      POSTGRES_HOST_AUTH_METHOD: trust
     ports:
       - "5432:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - pgdata_dev:/var/lib/postgresql/data
     restart: unless-stopped
+    networks:
+      - auth-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U root -d auth_service_dev"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+
+  # Your app for development
+  auth-service:
+    build:
+      context: .
+      dockerfile: ./docker/dev/Dockerfile
+    container_name: auth-service-dev
+    env_file:
+      - .env.dev
+    ports:
+      - "8000:8000"
+    depends_on:
+      auth-service-pg-container:
+        condition: service_healthy
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    working_dir: /usr/src/app
+    command: npm run dev
+    restart: unless-stopped
+    networks:
+      - auth-network
 
 volumes:
-  pgdata:
+  pgdata_dev:
+
+networks:
+  auth-network:
+    driver: bridge

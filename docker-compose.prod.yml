@@ -1,0 +1,78 @@
+version: "3.8"
+
+services:
+  auth-service-pg-container:
+    image: postgres:latest
+    container_name: auth-service-pg-container
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: auth_service_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - auth-network
+
+  auth-service:
+    build:
+      context: .
+      dockerfile: ./docker/prod/Dockerfile
+    container_name: auth-service-container
+    environment:
+      PORT: 8000
+      DB_HOST: auth-service-pg-container
+      DB_PORT: 5432
+      DB_USERNAME: root
+      DB_PASSWORD: root
+      DB_NAME: auth_service_dev
+      REFRESH_TOKEN_SECRET: koushik@12345
+      NODE_ENV: production
+      DB_SSL: false
+      JWKS_URI: http://localhost:8000/.well-known/jwks.json
+      CORS_ORIGIN: http://localhost:5173
+      PRIVATE_KEY: |
+        -----BEGIN RSA PRIVATE KEY-----
+        MIIEoAIBAAKCAQEAmNgdLAnUUnpDTsDRxMhq9Yf8c1I2ztUXFv3IxtYfd88Zc28B
+        k9oc5XnjbNeuL3DTrUd93c+oQ9ZJyUSBJWlCca3mqKckButfe/hSBxn1+AtIkL5U
+        V8VWajm2qwhCkhTpqPjZxW8USL2u+Q8FXv4evH+fxZOXWPKmR5YEYl59+dcGldWR
+        Y52wTQGAU9aytGCU++HOtZypb1bev7QYW27OJMfTBGbU2cCJ5v4YE1/Eo/AR/BZY
+        UcVasjKfJUf5Qp1Qdyd2f9pWulVANeFhLCInwrVFohsjH1FFdzc5oYCw1t7TBBrR
+        pcjJreBXfviCuMndyfAaELIaffGMYAKDSjIfoQIDAQABAoH/WpAzONTaKcSn/RHj
+        OWZHehSJUQt1zjgU5lqZjLdzDdp4ih1MIf8rAA2o4+UoIJQJ2LJzsepJGWjvb4JX
+        w4MLC7Cu61+dyTvN5/bLI8oOJFsLNDiSYS9cdLSdt9m9GDGsAaLx5jpbGn7KHmj4
+        FcEdFTPJx5gcJWghfmk1T9QNcOs9YYcYgnxNtk65VztvbTSCs7SDT1eK650mNDb3
+        phOkICavnTj2GUJkOKQGRE/IsMMREp0GiaU5loml7H8NPg7BbL7jkdsq9MNzfsKl
+        pKdZBvFKkDCG2i70UOWfrVr07paKzZfVpIAD7Eu6CFhmuKb7ukpM5//E4omWreae
+        MwlxAoGBAMYSSorMT6Cjzdk6srEosH4dklaQNokxQZBgI1BVPtv6KrFaUoCIE1u3
+        QLKec0ZsIqEytzFeUROQcfeeexVhzWx6ru2CSxpZQmrVGTcrw783cWHTHMz0NBNl
+        yweXBAu/jyV77x9rR5fy+44Xz/kQscsKrd2m+osSiNYaJ652f8rxAoGBAMWLorFM
+        zebSrc0IIHs2bx0/nvR7SykwAE27Pw/FIx2ZZuqT+kEAZqGCRr0OQHmSwRZaUFMa
+        Z35TaY0dtZ7OzSbI45hiuSHndzIvlnQ2E/Rr+Z88np6rBeT2kLAR5+cqAtOVO5o0
+        CHg3C8XKMCNwhW1YlkGQ+j6ATdv8P2EoPb+xAoGAJJjKlxyq9cZuSV3UGHGpMpQq
+        Lr5UpUKpl5B71eL6S1DMxJootkDuOrsARECMkg121Iv3VzLTDidZN2Rb35aDizCb
+        05yIXeTyJaUcFJqMf28yDt4f6yqP2KmtOsjHYZhSTZ25j/eVcdjea+GwdpeEEjz1
+        5QduMXYKPGz2ugCBGjECgYAPkx3FmseVDkEzrBNbg4QpKy3uGpZnbehoOH4VUTae
+        i8yoa/hMDasJysqm9yuwKhjdGUvB8Y/9TrhArvn1xlo4V5hSGF5+RNCJ/WSATw8t
+        syGgI1hiLBuv3Jy1tQOynwZQBjEHzFhqmfRsqK847BMo9tYJ31NLgDQjRvT8RP7x
+        UQKBgH+VrEhlye1rk9K2FfFO4f+HvjT2ehKvZln5Zza7mTzZOS2rOdslW9q7teXh
+        lmqjwSABmr7JnLgqWWfyzLCdrmLQXEyt9mlB0cmf/3knIkT00Okasa2fvIqGC+aL
+        rm8ferVPSOzLipyxjn+cZQ/34u+/Mxk/PG0GxgXxkAjoefoA
+        -----END RSA PRIVATE KEY-----
+
+    ports:
+      - "8000:8000"
+    depends_on:
+      - auth-service-pg-container
+    restart: unless-stopped
+    networks:
+      - auth-network
+
+volumes:
+  pgdata:
+
+networks:
+  auth-network:
+    driver: bridge
