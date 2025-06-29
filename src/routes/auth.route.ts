@@ -5,7 +5,6 @@ import {
   Response,
   Router,
 } from "express";
-import { AppDataSource } from "../config/data-source";
 import { logger } from "../config/logger";
 import { AuthController } from "../controllers/AuthController";
 import { User } from "../entity/User";
@@ -19,6 +18,7 @@ import authenticate from "../../middlewares/authenticate";
 import { IAuthRequest } from "../types";
 import validateRefreshToken from "../../middlewares/validateRefreshToken";
 import parseRefreshToken from "../../middlewares/parseRefreshToken";
+import AppDataSource from "../config/data-source";
 
 const authRouter = Router();
 

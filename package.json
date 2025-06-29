@@ -2,21 +2,25 @@
   "name": "auth-services",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts": {
-    "dev": "cross-env NODE_ENV=dev nodemon src/server.ts",
-    "build": "tsc",
-    "lint:fix": "eslint . --fix",
-    "lint:check": "eslint .",
-    "format:fix": "prettier . --write",
-    "format:check": "prettier . --check",
-    "test": "jest --no-cache --coverage --all --runInBand",
-    "test:watch": "jest --watch --runInBand",
-    "prepare": "husky",
-    "start": "ts-node src/index.ts",
-    "migration:generate": "cross-env NODE_ENV=dev typeorm-ts-node-commonjs -d src/config/data-source.ts migration:generate",
-    "migration:run": "cross-env NODE_ENV=dev typeorm-ts-node-commonjs -d src/config/data-source.ts migration:run",
-    "migration:create": "cross-env NODE_ENV=dev typeorm-ts-node-commonjs migration:create"
-  },
+    "scripts": {
+      "dev": "npm run docker:up && sleep 10 && npm run migration:run && npm run dev:watch",
+      "dev:watch": "cross-env NODE_ENV=dev nodemon src/server.ts",
+      
+      "docker:up": "docker compose up -d",
+      "docker:down": "docker compose down",
+      "docker:logs": "docker compose logs -f",
+      "docker:clean": "docker compose down -v",
+      
+      "migration:run": "cross-env NODE_ENV=dev DB_HOST=localhost typeorm-ts-node-commonjs -d src/config/data-source.ts migration:run",
+      "migration:generate": "cross-env NODE_ENV=dev DB_HOST=localhost typeorm-ts-node-commonjs -d src/config/data-source.ts migration:generate",
+      
+      "build": "tsc",
+      "test": "jest",
+      "lint:check": "eslint .",
+      "lint:fix":   "eslint . --fix",
+      "format:check": "prettier . --check",
+      "format:fix":   "prettier . --write"
+    },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/KoushikPanda1729/auth-services.git"
@@ -32,6 +36,7 @@
     "@eslint/js": "^9.19.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/cookie-parser": "^1.4.8",
+    "@types/cors": "^2.8.19",
     "@types/eslint__js": "^8.42.3",
     "@types/express": "^5.0.0",
     "@types/http-errors": "^2.0.4",
@@ -62,6 +67,7 @@
   "dependencies": {
     "bcryptjs": "^3.0.2",
     "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "express-jwt": "^8.5.1",
