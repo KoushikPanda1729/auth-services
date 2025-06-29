@@ -1,10 +1,10 @@
 import { DataSource } from "typeorm";
-import { AppDataSource } from "../../src/config/data-source";
 import app from "../../src/app";
 import request from "supertest";
 import { createJWKSMock, JWKSMock } from "mock-jwks";
 import { User } from "../../src/entity/User";
 import { roles } from "../../src/constants";
+import AppDataSource from "../../src/config/data-source";
 
 describe("GET /auth/self", () => {
   let connection: DataSource;

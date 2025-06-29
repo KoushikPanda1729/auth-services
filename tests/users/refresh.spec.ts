@@ -1,8 +1,8 @@
 import request from "supertest";
 import { DataSource } from "typeorm";
 import app from "../../src/app";
-import { AppDataSource } from "../../src/config/data-source";
 import { isJwtValid } from "../../src/utils";
+import AppDataSource from "../../src/config/data-source";
 
 describe("POST /auth/refresh", () => {
   let connection: DataSource;
@@ -37,7 +37,7 @@ describe("POST /auth/refresh", () => {
     }
     const cookies =
       (response.headers as unknown as Headers)["set-cookie"] || [];
-    let refreshToken = null;
+    let refreshToken: string | null = null;
     cookies.forEach((cookie) => {
       if (cookie.startsWith("refreshToken=")) {
         refreshToken = cookie.split(";")[0].split("=")[1];

@@ -1,9 +1,9 @@
 import request from "supertest";
 import app from "../../src/app";
 import { DataSource } from "typeorm";
-import { AppDataSource } from "../../src/config/data-source";
 import { createJWKSMock, JWKSMock } from "mock-jwks";
 import { roles } from "../../src/constants";
+import AppDataSource from "../../src/config/data-source";
 
 describe("POST /auth/logout", () => {
   let connection: DataSource;

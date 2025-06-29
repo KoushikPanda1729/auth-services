@@ -2,10 +2,10 @@ import { createJWKSMock, JWKSMock } from "mock-jwks";
 import request from "supertest";
 import { DataSource } from "typeorm";
 import app from "../../src/app";
-import { AppDataSource } from "../../src/config/data-source";
 import { roles } from "../../src/constants";
 import { User } from "../../src/entity/User";
 import { Tenant } from "../../src/entity/Tenant";
+import AppDataSource from "../../src/config/data-source";
 
 describe("POST /users", () => {
   let connection: DataSource;
