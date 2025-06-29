@@ -1,11 +1,11 @@
 import request from "supertest";
 import app from "../../src/app";
 import { DataSource } from "typeorm";
-import { AppDataSource } from "../../src/config/data-source";
 import { User } from "../../src/entity/User";
 import { roles } from "../../src/constants";
 import { isJwtValid } from "../../src/utils";
 import { RefreshToken } from "../../src/entity/RefreshToken";
+import AppDataSource from "../../src/config/data-source";
 
 describe("POST /auth/register", () => {
   let connection: DataSource;
@@ -172,8 +172,8 @@ describe("POST /auth/register", () => {
       const cookies =
         (response.headers as unknown as Headers)["set-cookie"] || [];
 
-      let accessToken = null;
-      let refreshToken = null;
+      let accessToken: string | null = null;
+      let refreshToken: string | null = null;
       cookies.forEach((cookie) => {
         if (cookie.startsWith("accessToken=")) {
           accessToken = cookie.split(";")[0].split("=")[1];
