@@ -13,6 +13,7 @@ const {
   JWKS_URI,
   PRIVATE_KEY,
   DB_SSL,
+  CORS_ORIGIN,
 } = process.env;
 export const Config = {
   PORT,
@@ -26,4 +27,5 @@ export const Config = {
   JWKS_URI,
   PRIVATE_KEY,
   DB_SSL,
+  CORS_ORIGIN,
 };

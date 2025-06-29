@@ -7,7 +7,6 @@ import {
 } from "express";
 import authenticate from "../../middlewares/authenticate";
 import { canAccess } from "../../middlewares/canAccess";
-import { AppDataSource } from "../config/data-source";
 import { logger } from "../config/logger";
 import { roles } from "../constants";
 import { UserController } from "../controllers/UserController";
@@ -16,6 +15,7 @@ import { UserService } from "../services/UserService";
 import createUserValidators from "../validator/create-user-validators";
 import updateUserValidator from "../validator/update-user-validator";
 import listUsersValidator from "../validator/list-users-validator";
+import AppDataSource from "../config/data-source";
 
 const userRouter = Router();
 const userRepository = AppDataSource.getRepository(User);
