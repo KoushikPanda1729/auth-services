@@ -2,25 +2,22 @@
   "name": "auth-services",
   "version": "1.0.0",
   "main": "index.js",
-    "scripts": {
-      "dev": "npm run docker:up && sleep 10 && npm run migration:run && npm run dev:watch",
-      "dev:watch": "cross-env NODE_ENV=dev nodemon src/server.ts",
-      
-      "docker:up": "docker compose up -d",
-      "docker:down": "docker compose down",
-      "docker:logs": "docker compose logs -f",
-      "docker:clean": "docker compose down -v",
-      
-      "migration:run": "cross-env NODE_ENV=dev DB_HOST=localhost typeorm-ts-node-commonjs -d src/config/data-source.ts migration:run",
-      "migration:generate": "cross-env NODE_ENV=dev DB_HOST=localhost typeorm-ts-node-commonjs -d src/config/data-source.ts migration:generate",
-      
-      "build": "tsc",
-      "test": "jest",
-      "lint:check": "eslint .",
-      "lint:fix":   "eslint . --fix",
-      "format:check": "prettier . --check",
-      "format:fix":   "prettier . --write"
-    },
+  "scripts": {
+    "dev": "npm run docker:up && sleep 10 && npm run migration:run && npm run dev:watch",
+    "dev:watch": "cross-env NODE_ENV=dev nodemon src/server.ts",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f",
+    "docker:clean": "docker compose down -v",
+    "migration:run": "cross-env NODE_ENV=dev DB_HOST=localhost typeorm-ts-node-commonjs -d src/config/data-source.ts migration:run",
+    "migration:generate": "cross-env NODE_ENV=dev DB_HOST=localhost typeorm-ts-node-commonjs -d src/config/data-source.ts migration:generate",
+    "build": "tsc",
+    "test": "jest",
+    "lint:check": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format:check": "prettier . --check",
+    "format:fix": "prettier . --write"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/KoushikPanda1729/auth-services.git"
