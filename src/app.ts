@@ -14,7 +14,7 @@ import userRouter from "./routes/user.route";
 import cors from "cors";
 import { Config } from "./config";
 const app = express();
-
+// setup middleware
 app.use(express.static("public", { dotfiles: "allow" }));
 app.use(express.json({ limit: "20kb" }));
 app.use(cookieParser());
